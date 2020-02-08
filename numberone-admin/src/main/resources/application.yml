@@ -76,6 +76,22 @@ mybatis:
     # 加载全局的配置文件
     configLocation: classpath:mapper/mybatis-config.xml
 
+#mybatis配置
+mybatis-plus:
+  typeAliasesPackage: com.numberone
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  global-config:
+    db-column-underline: true #驼峰下划线转换
+    sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+    logic-delete-value: 1
+    logic-not-delete-value: 0
+    db-config:
+      #字段策略 IGNORED:"忽略判断",NOT_NULL:"非 NULL 判断"),NOT_EMPTY:"非空判断"
+      field-strategy: not_null
+  configuration:
+    call-setters-on-nulls: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 # PageHelper分页插件
 pagehelper: 
   helperDialect: mysql
