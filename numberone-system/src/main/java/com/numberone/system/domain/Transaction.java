@@ -37,7 +37,7 @@ public class Transaction extends Model<Transaction> {
     /**
      * 支出钱包id
      */
-    @TableField("from_user_address")
+    @TableField("from_wallet_address")
     private String fromWalletAddress;
     /**
      * 收取用户id

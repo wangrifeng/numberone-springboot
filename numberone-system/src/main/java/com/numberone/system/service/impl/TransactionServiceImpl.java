@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -77,5 +76,10 @@ public class TransactionServiceImpl extends ServiceImpl<TransactionMapper, Trans
             }
             walletMapper.updateById(wallet);
         }
+    }
+
+    @Override
+    public List<Map<String,Object>> getTransaction(Map<String,Object> params) {
+        return transactionMapper.getTransaction(params);
     }
 }

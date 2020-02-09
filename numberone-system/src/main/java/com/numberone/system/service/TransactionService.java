@@ -3,6 +3,9 @@ package com.numberone.system.service;
 import com.baomidou.mybatisplus.service.IService;
 import com.numberone.system.domain.Transaction;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  *  服务类
@@ -20,5 +23,7 @@ public interface TransactionService extends IService<Transaction> {
      * @param mdcMoney mdc收益
      */
     void settlementIncome(String userId,String usdtMoney,String mdcMoney);
+
+    List<Map<String,Object>> getTransaction(Map<String,Object> params);
 
 }
