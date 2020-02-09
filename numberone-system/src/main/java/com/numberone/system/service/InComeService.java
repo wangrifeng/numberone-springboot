@@ -6,6 +6,7 @@ import com.numberone.system.domain.InCome;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,4 +39,10 @@ public interface InComeService extends IService<InCome> {
      * @return
      */
     BigDecimal getTotalSum(Integer userId, Date selDate, double burnValue);
+
+    /**
+     * 收益列表
+     * @return
+     */
+    List<InCome> list();
 }

@@ -65,6 +65,9 @@ public class InCome {
     @TableField("manage_salary")
     private BigDecimal manageSalary;
 
+    @TableField(exist = false)
+    private String userName;
+
     public InCome() {
     }
 
