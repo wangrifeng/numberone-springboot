@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 public interface InComeMapper extends BaseMapper<InCome> {
@@ -38,4 +39,10 @@ public interface InComeMapper extends BaseMapper<InCome> {
      * @return
      */
     BigDecimal getTotalSum(@Param("userId") Integer userId, @Param("selDate") Date selDate, @Param("burnValue") double burnValue);
+
+    /**
+     * 查询收益列表
+     * @return
+     */
+    List<InCome> list();
 }

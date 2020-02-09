@@ -2,6 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.numberone.system.mapper.InComeMapper">
 
+    <select id="list" resultType="com.numberone.system.domain.InCome">
+        select
+        id ,
+        m.user_id as userId,
+        contract_salary as contractSalary ,
+        share_salary as shareSalary ,
+        manage_salary as manageSalary ,
+        salary ,
+        sel_date as selDate ,
+        u.user_name as userName
+        from
+        mdc_income m
+        left join sys_user u on u.user_id = m.user_id
+        where m.type = 1
+        order by sel_date desc , salary desc
+    </select>
+
     <select id="selectStaticIncomeGroupByLevel" resultType="Map">
         <foreach collection="map" index="key" item="value" separator="UNION">
             select

@@ -1,5 +1,6 @@
 package com.numberone.system.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.numberone.system.domain.InCome;
 import com.numberone.system.mapper.InComeMapper;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,5 +31,10 @@ public class InComeServiceImpl extends ServiceImpl<InComeMapper, InCome> impleme
     @Override
     public BigDecimal getTotalSum(Integer userId, Date selDate, double burnValue) {
         return this.baseMapper.getTotalSum(userId,selDate,burnValue);
+    }
+
+    @Override
+    public List<InCome> list() {
+        return this.baseMapper.list();
     }
 }

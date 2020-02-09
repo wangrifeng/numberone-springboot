@@ -174,6 +174,9 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         i.setSalary(salary);
         inComeService.updateById(i);
 
+        //钱包新增收益
+
+
         //计算用户签约收益总数
         User user = userService.selectById(userId);
         User u = new User();
