@@ -39,6 +39,9 @@ public class ContractDailyRewardServiceImpl implements RewardService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TransactionService transactionService;
+
     @Override
     public void calculateContractSalary(Integer userId, Map<Integer, Contract> contractCache, Date selDate) {
         //查询该用户绑定的合约信息
@@ -151,6 +154,9 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         u.setAdvanceContractSum(advanceContractSum);
         inComeService.updateById(i);
         userService.updateById(u);
+
+        //更新余额收益
+        transactionService.settlementIncome(userId.toString(),"0",salary.toString());
     }
 
     //3.更新用户签约余额
@@ -175,7 +181,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         inComeService.updateById(i);
 
         //钱包新增收益
-
+        transactionService.settlementIncome(userId.toString(),salary.toString(),"0");
 
         //计算用户签约收益总数
         User user = userService.selectById(userId);
