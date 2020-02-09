@@ -63,7 +63,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
             BigDecimal amount = contract.getAmount();
             String unit = contract.getUnit();
             String remark = "合约信息为" + JSON.toJSONString(contract) + ";";
-            InCome inCome = new InCome(userId, unit, contract.getId(), contract.getType(), remark, contract.getAmount(), contract.getIncomeRate(), selDate, new Date());
+            InCome inCome = new InCome(userId, "MDC", contract.getId(), contract.getType(), remark, contract.getAmount(), contract.getIncomeRate(), selDate, new Date());
             BigDecimal salary = null;
             if (contract.getType() == 1) {
                 //签约日收益
@@ -74,12 +74,24 @@ public class ContractDailyRewardServiceImpl implements RewardService {
                 salary = amount.multiply(new BigDecimal(userContract.getNumber())).multiply(contract.getIncomeRate());
                 inCome.setNumber(userContract.getNumber());
             }
-            inCome.setContractSalary(salary);
+            //计算出的单位是 USTD 将其转换为 MDC
+            inCome.setContractSalary(convertUSTD2MDC(salary));
 
             //薪水入库
             inComeService.insert(inCome);
         }
     }
+
+    /**
+     * 将USTD转换为MDC
+     * @param salary
+     * @return
+     */
+    private BigDecimal convertUSTD2MDC(BigDecimal salary) {
+        BigDecimal rate = new BigDecimal("0.1");
+        return salary.divide(rate);
+    }
+
 
     @Override
     public void calculateShareSalary(Integer userId, Map<Integer, Contract> contractCache, Date selDate) {
@@ -181,7 +193,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         inComeService.updateById(i);
 
         //钱包新增收益
-        transactionService.settlementIncome(userId.toString(),salary.toString(),"0");
+        transactionService.settlementIncome(userId.toString(),"0",salary.toString());
 
         //计算用户签约收益总数
         User user = userService.selectById(userId);
