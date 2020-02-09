@@ -1,23 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.app.mdc.mapper.mdc.TransactionMapper">
+<mapper namespace="com.numberone.system.mapper.TransactionMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.app.mdc.model.mdc.Transaction">
-        <id column="transaction_id" property="transactionId" />
-        <result column="from_user_id" property="fromUserId" />
-        <result column="from_wallet_id" property="fromWalletId" />
-        <result column="to_user_id" property="toUserId" />
-        <result column="to_wallet_id" property="toWalletId" />
-        <result column="transaction_amount" property="transactionAmount" />
-        <result column="transaction_type" property="transactionType" />
-        <result column="create_time" property="createTime" />
-        <result column="remark" property="remark" />
-    </resultMap>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        transaction_id, from_user_id, from_wallet_id, to_user_id, to_wallet_id, transaction_amount, transaction_type, create_time, remark
-    </sql>
+    <select id="getTransaction" resultType="java.util.Map">
+        select
+            transaction_id,
+            from_user_id,
+            (Select user_name from sys_user where from_user_id = user_id) fromUserName,
+            from_wallet_address,
+            to_user_id,
+            (Select user_name from sys_user where to_user_id = user_id) toUserName,
+            to_wallet_address,
+            create_time,
+            remark,
+            from_amount,
+            from_wallet_type,
+            to_amount,
+            to_wallet_type,
+            transaction_type,
+            fee_amount,
+            case transaction_status when '-1' then '交易失败'
+                                    when '0' then '交易中'
+                                    when '1' then '交易成功'
+                end transactionStatus,
+            transaction_hash
+        from mdc_transaction
+        where 0 = 0
+        <if test='transactionType!=null and transactionType!=""'>
+            and transaction_type=#{transactionType}
+        </if>
+    </select>
 
 </mapper>
