@@ -5,6 +5,7 @@ import com.numberone.system.domain.Contract;
 import com.numberone.system.service.ContractService;
 import com.numberone.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ public class AllRewardJob {
     private ContractService contractService;
 
 
+    @Scheduled(cron = "0 10 0 * * ?")
     @Transactional
     public void execute() throws BusinessException {
         //找出所有用户ids

@@ -9,6 +9,7 @@
         contract_salary as contractSalary ,
         share_salary as shareSalary ,
         manage_salary as manageSalary ,
+        same_level_salary as sameLevelSalary ,
         salary ,
         sel_date as selDate ,
         u.user_name as userName
