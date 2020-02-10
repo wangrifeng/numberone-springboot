@@ -112,9 +112,9 @@ public class ContractDailyRewardServiceImpl implements RewardService {
                 //烧伤值
                 BigDecimal burnValue = contract.getAmount().multiply(contract.getIncomeRate());
                 //1.分享收益
-                BigDecimal shareSalary = this.getShareSalary(levelIds, selDate, userId, burnValue);
+                BigDecimal shareSalary = this.getShareSalary(levelIds, selDate, userId, convertUSTD2MDC(burnValue));
                 //2.管理收益
-                BigDecimal manageSalary = this.getManageSalary(levelIds, selDate, userId, burnValue, contractCache);
+                BigDecimal manageSalary = this.getManageSalary(levelIds, selDate, userId, contractCache);
                 //3.更新用户签约余额
                 updateUserSignContractSum(userId, selDate);
             } else {
@@ -277,10 +277,9 @@ public class ContractDailyRewardServiceImpl implements RewardService {
      * @param levelIds
      * @param selDate
      * @param userId
-     * @param burnValue
      * @return
      */
-    private BigDecimal getManageSalary(Map<Integer, Map<String, Object>> levelIds, Date selDate, Integer userId, BigDecimal burnValue, Map<Integer, Contract> contractCache) {
+    private BigDecimal getManageSalary(Map<Integer, Map<String, Object>> levelIds, Date selDate, Integer userId, Map<Integer, Contract> contractCache) {
         //查询该用户是否已经计算过管理奖
         EntityWrapper<InCome> inComeEntityWrapper = new EntityWrapper<>();
         inComeEntityWrapper
@@ -378,28 +377,31 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         for (User du : directUsers) {
             if (du.getLevel() >= currentUser.getLevel()) {
                 //平级现象 直推会员等级高于当前用户 当前用户拿直推用户的管理奖的6%
-                //查询用户对应的合约信息
-                Contract contract = userContractService.selectContractByUserId(userId, 1);
-                if (contract == null) {
-                    logger.info("用户" + currentUser.getUserName() + "获取" + du.getUserName() + "的平级收益为" + 0);
-                    continue;
-                }
-
-                BigDecimal duBurnValue = contract.getAmount().multiply(contract.getIncomeRate());
 
                 //用户的所有被推荐人id
                 Map<Integer, Map<String, Object>> directLevelIds = userLevelService.selectRecedUserIds(Integer.parseInt(du.getId()));
                 //递归查询直推用户的管理奖
-                BigDecimal directUserManageSalary = this.getManageSalary(directLevelIds, selDate, Integer.parseInt(du.getId()), duBurnValue, contractCache);
+                BigDecimal directUserManageSalary = this.getManageSalary(directLevelIds, selDate, Integer.parseInt(du.getId()), contractCache);
+                if(userId == 179 ){
+                    System.out.println(123);
+                }
                 //平级用户管理奖带来的收益
                 BigDecimal directUserManageInCome = directUserManageSalary.multiply(new BigDecimal("0.06"));
                 logger.info("用户" + currentUser.getUserName() + "获取" + du.getUserName() + "的平级收益为" + directUserManageInCome);
                 count = count.add(directUserManageInCome);
             } else {
+                //查询用户对应的合约信息
+                Contract contract = userContractService.selectContractByUserId(Integer.parseInt(du.getId()), 1);
+                if (contract == null) {
+                    logger.info("用户" + currentUser.getUserName() + "获取" + du.getUserName() + "的平级收益为" + 0);
+                    continue;
+                }
+
+                BigDecimal burnValue = contract.getAmount().multiply(contract.getIncomeRate());
                 //极差现象 比率为直推用户伞下的 差比率
                 BigDecimal subtractRate = manageRate.subtract(this.getRateByLevel(du.getLevel()));
                 //计算直推用户伞下的总收益
-                BigDecimal diretUserTotalSum = inComeService.getTotalSum(Integer.parseInt(du.getId()), selDate, burnValue.doubleValue());
+                BigDecimal diretUserTotalSum = inComeService.getTotalSum(Integer.parseInt(du.getId()), selDate, convertUSTD2MDC(burnValue).doubleValue());
                 //该直推用户带来的极差收益
                 BigDecimal directUserSubtractInCome = diretUserTotalSum.multiply(subtractRate);
                 logger.info("用户" + currentUser.getUserName() + "获取" + du.getUserName() + "的极差收益为" + directUserSubtractInCome);
@@ -471,6 +473,9 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         }
         InCome inCome = inComes.get(0);
 
+        if(userId == 179 ){
+            System.out.println(123);
+        }
         //查询所有被推荐人收益分代总和
         Map<Integer, Map<String, Object>> staticIncomeGroupByLevel = inComeService.selectStaticIncomeGroupByLevel(levelIds, selDate, burnValue);
 
