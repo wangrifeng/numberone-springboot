@@ -42,6 +42,9 @@ public class ContractDailyRewardServiceImpl implements RewardService {
     @Autowired
     private TransactionService transactionService;
 
+    @Autowired
+    private ISysConfigService sysConfigService;
+
     @Override
     public void calculateContractSalary(Integer userId, Map<Integer, Contract> contractCache, Date selDate) {
         //查询该用户绑定的合约信息
@@ -84,11 +87,12 @@ public class ContractDailyRewardServiceImpl implements RewardService {
 
     /**
      * 将USTD转换为MDC
+     *
      * @param salary
      * @return
      */
     private BigDecimal convertUSTD2MDC(BigDecimal salary) {
-        BigDecimal rate = new BigDecimal("0.1");
+        BigDecimal rate = new BigDecimal(sysConfigService.selectConfigByKey("MDC_CONVERT_USDT"));
         return salary.divide(rate);
     }
 
@@ -168,7 +172,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         userService.updateById(u);
 
         //更新余额收益
-        transactionService.settlementIncome(userId.toString(),"0",salary.toString());
+        transactionService.settlementIncome(userId.toString(), "0", salary.toString());
     }
 
     //3.更新用户签约余额
@@ -193,7 +197,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         inComeService.updateById(i);
 
         //钱包新增收益
-        transactionService.settlementIncome(userId.toString(),"0",salary.toString());
+        transactionService.settlementIncome(userId.toString(), "0", salary.toString());
 
         //计算用户签约收益总数
         User user = userService.selectById(userId);
@@ -382,9 +386,6 @@ public class ContractDailyRewardServiceImpl implements RewardService {
                 Map<Integer, Map<String, Object>> directLevelIds = userLevelService.selectRecedUserIds(Integer.parseInt(du.getId()));
                 //递归查询直推用户的管理奖
                 BigDecimal directUserManageSalary = this.getManageSalary(directLevelIds, selDate, Integer.parseInt(du.getId()), contractCache);
-                if(userId == 179 ){
-                    System.out.println(123);
-                }
                 //平级用户管理奖带来的收益
                 BigDecimal directUserManageInCome = directUserManageSalary.multiply(new BigDecimal("0.06"));
                 logger.info("用户" + currentUser.getUserName() + "获取" + du.getUserName() + "的平级收益为" + directUserManageInCome);
@@ -433,9 +434,9 @@ public class ContractDailyRewardServiceImpl implements RewardService {
             case 2:
                 return new BigDecimal("0.08");
             case 3:
-                return new BigDecimal("0.1");
+                return new BigDecimal(sysConfigService.selectConfigByKey("manager_gold_player_rate"));
             case 4:
-                return new BigDecimal("0.15");
+                return new BigDecimal(sysConfigService.selectConfigByKey("manager_super_player_rate"));
         }
         return new BigDecimal(0);
     }
@@ -473,9 +474,6 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         }
         InCome inCome = inComes.get(0);
 
-        if(userId == 179 ){
-            System.out.println(123);
-        }
         //查询所有被推荐人收益分代总和
         Map<Integer, Map<String, Object>> staticIncomeGroupByLevel = inComeService.selectStaticIncomeGroupByLevel(levelIds, selDate, burnValue);
 
@@ -484,41 +482,41 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         switch (directNumber) {
             case 1:
                 //直推一人
-                shareSalary = this.getLevelSum(staticIncomeGroupByLevel, 1).multiply(new BigDecimal("0.25"));
+                shareSalary = this.getLevelSum(staticIncomeGroupByLevel, 1).multiply(getShareRateByLevel(1));
                 break;
             case 2:
-                shareSalary = this.getLevelSum(staticIncomeGroupByLevel, 1).multiply(new BigDecimal("0.25"))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 2).multiply(new BigDecimal("0.15")));
+                shareSalary = this.getLevelSum(staticIncomeGroupByLevel, 1).multiply(getShareRateByLevel(1))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 2).multiply(getShareRateByLevel(2)));
                 break;
             case 3:
-                shareSalary = this.getLevelSum(staticIncomeGroupByLevel, 1).multiply(new BigDecimal("0.25"))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 2).multiply(new BigDecimal("0.15")))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 3).multiply(new BigDecimal("0.1")));
+                shareSalary = this.getLevelSum(staticIncomeGroupByLevel, 1).multiply(getShareRateByLevel(1))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 2).multiply(getShareRateByLevel(2)))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 3).multiply(getShareRateByLevel(3)));
                 break;
             case 4:
-                shareSalary = this.getLevelSum(staticIncomeGroupByLevel, 1).multiply(new BigDecimal("0.25"))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 2).multiply(new BigDecimal("0.15")))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 3).multiply(new BigDecimal("0.1")))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 4).multiply(new BigDecimal("0.05")));
+                shareSalary = this.getLevelSum(staticIncomeGroupByLevel, 1).multiply(getShareRateByLevel(1))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 2).multiply(getShareRateByLevel(2)))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 3).multiply(getShareRateByLevel(3)))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 4).multiply(getShareRateByLevel(4)));
                 break;
             case 5:
-                shareSalary = this.getLevelSum(staticIncomeGroupByLevel, 1).multiply(new BigDecimal("0.25"))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 2).multiply(new BigDecimal("0.15")))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 3).multiply(new BigDecimal("0.1")))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 4).multiply(new BigDecimal("0.05")))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 5).multiply(new BigDecimal("0.05")));
+                shareSalary = this.getLevelSum(staticIncomeGroupByLevel, 1).multiply(getShareRateByLevel(1))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 2).multiply(getShareRateByLevel(2)))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 3).multiply(getShareRateByLevel(3)))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 4).multiply(getShareRateByLevel(4)))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 5).multiply(getShareRateByLevel(5)));
                 break;
             default:
-                shareSalary = this.getLevelSum(staticIncomeGroupByLevel, 1).multiply(new BigDecimal("0.25"))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 2).multiply(new BigDecimal("0.15")))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 3).multiply(new BigDecimal("0.1")))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 4).multiply(new BigDecimal("0.05")))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 5).multiply(new BigDecimal("0.05")))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 6).multiply(new BigDecimal("0.03")))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 7).multiply(new BigDecimal("0.03")))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 8).multiply(new BigDecimal("0.03")))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 9).multiply(new BigDecimal("0.03")))
-                        .add(this.getLevelSum(staticIncomeGroupByLevel, 10).multiply(new BigDecimal("0.03")));
+                shareSalary = this.getLevelSum(staticIncomeGroupByLevel, 1).multiply(getShareRateByLevel(1))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 2).multiply(getShareRateByLevel(2)))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 3).multiply(getShareRateByLevel(3)))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 4).multiply(getShareRateByLevel(4)))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 5).multiply(getShareRateByLevel(5)))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 6).multiply(getShareRateByLevel(6)))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 7).multiply(getShareRateByLevel(7)))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 8).multiply(getShareRateByLevel(8)))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 9).multiply(getShareRateByLevel(9)))
+                        .add(this.getLevelSum(staticIncomeGroupByLevel, 10).multiply(getShareRateByLevel(10)));
 
         }
 
@@ -527,6 +525,31 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         i.setShareSalary(shareSalary);
         inComeService.updateById(i);
         return shareSalary;
+    }
+
+    private BigDecimal getShareRateByLevel(Integer generation) {
+        if (generation == 1) {
+            return new BigDecimal(sysConfigService.selectConfigByKey("share_one_rate"));
+        } else if (generation == 2) {
+            return new BigDecimal(sysConfigService.selectConfigByKey("share_two_rate"));
+        }else if (generation == 3) {
+            return new BigDecimal(sysConfigService.selectConfigByKey("share_three_rate"));
+        }else if (generation == 4) {
+            return new BigDecimal(sysConfigService.selectConfigByKey("share_four_rate"));
+        }else if (generation == 5) {
+            return new BigDecimal(sysConfigService.selectConfigByKey("share_five_rate"));
+        }else if (generation == 6) {
+            return new BigDecimal(sysConfigService.selectConfigByKey("share_six_rate"));
+        }else if (generation == 7) {
+            return new BigDecimal(sysConfigService.selectConfigByKey("share_seven_rate"));
+        }else if (generation == 8) {
+            return new BigDecimal(sysConfigService.selectConfigByKey("share_eight_rate"));
+        }else if (generation == 9) {
+            return new BigDecimal(sysConfigService.selectConfigByKey("share_nine_rate"));
+        }else if (generation == 10) {
+            return new BigDecimal(sysConfigService.selectConfigByKey("share_ten_rate"));
+        }
+        return new BigDecimal(0);
     }
 
     private BigDecimal getLevelSum(Map<Integer, Map<String, Object>> staticIncomeGroupByLevel, Integer level) {

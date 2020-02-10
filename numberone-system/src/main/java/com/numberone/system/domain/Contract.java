@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import com.numberone.common.utils.SpringContextHolder;
+import com.numberone.system.service.ISysConfigService;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -57,4 +59,46 @@ public class Contract {
 
     @TableField("update_by")
     private String updateBy;
+
+    public BigDecimal getAmount() {
+        ISysConfigService configService = SpringContextHolder.applicationContext.getBean(ISysConfigService.class);
+        if(this.type == 1 && this.level == 1){
+            //屌丝
+            return new BigDecimal(configService.selectConfigByKey("diaosi_amount"));
+        }else if(this.type == 1 && this.level == 2){
+            //网红
+            return new BigDecimal(configService.selectConfigByKey("wanghong_amount"));
+        }else if(this.type == 1 && this.level == 3){
+            //明星
+            return new BigDecimal(configService.selectConfigByKey("mingxing_amount"));
+        }else if(this.type == 1 && this.level == 4){
+            //大咖
+            return  new BigDecimal(configService.selectConfigByKey("daka_amount"));
+        }else if(this.type == 2){
+            //进阶卡
+            return new BigDecimal(configService.selectConfigByKey("advance_card_price"));
+        }
+        return new BigDecimal(0);
+    }
+
+    public BigDecimal getIncomeRate() {
+        ISysConfigService configService = SpringContextHolder.applicationContext.getBean(ISysConfigService.class);
+        if(this.type == 1 && this.level == 1){
+            //屌丝
+            return new BigDecimal(configService.selectConfigByKey("diaosi_rate"));
+        }else if(this.type == 1 && this.level == 2){
+            //网红
+            return new BigDecimal(configService.selectConfigByKey("wanghong_rate"));
+        }else if(this.type == 1 && this.level == 3){
+            //明星
+            return new BigDecimal(configService.selectConfigByKey("mingxing_rate"));
+        }else if(this.type == 1 && this.level == 4){
+            //大咖
+            return  new BigDecimal(configService.selectConfigByKey("daka_rate"));
+        }else if(this.type == 2){
+            //进阶卡
+            return new BigDecimal(configService.selectConfigByKey("advance_card_income_rate"));
+        }
+        return new BigDecimal(0);
+    }
 }

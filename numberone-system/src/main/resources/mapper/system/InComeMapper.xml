@@ -22,7 +22,8 @@
     <select id="selectStaticIncomeGroupByLevel" resultType="Map">
         <foreach collection="map" index="key" item="value" separator="UNION">
             select
-             #{key} as level,ifnull(sum(if(contract_salary>#{burnValue},#{burnValue},contract_salary)),0) as totalStaticNum
+            #{key} as level,ifnull(sum(if(contract_salary>#{burnValue},#{burnValue},contract_salary)),0) as
+            totalStaticNum
             from
             mdc_income
             where
@@ -45,9 +46,18 @@
         select
         ifnull(sum(if(mi.contract_salary > #{burnValue}, #{burnValue} , mi.contract_salary )),0)
         from
-        sys_user_level sul
-        join mdc_income mi on mi.user_id = sul.reced_id and mi.sel_date = left(#{selDate},10) and mi.type = 1
+        mdc_income mi
         where
-        sul.rec_id = #{userId}
+        mi.sel_date = left(#{selDate},10) and mi.type = 1
+        and user_id in (
+        select
+        reced_id
+        from
+         sys_user_level
+         where
+         rec_id = #{userId}
+        union
+        select #{userId}
+        )
     </select>
 </mapper>
