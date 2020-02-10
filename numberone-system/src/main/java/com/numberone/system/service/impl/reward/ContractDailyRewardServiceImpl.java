@@ -119,7 +119,9 @@ public class ContractDailyRewardServiceImpl implements RewardService {
                 BigDecimal shareSalary = this.getShareSalary(levelIds, selDate, userId, convertUSTD2MDC(burnValue));
                 //2.管理收益
                 BigDecimal manageSalary = this.getManageSalary(levelIds, selDate, userId, contractCache);
-                //3.更新用户签约余额
+                //3.平级收益
+                BigDecimal sameLevelSalary = this.getSameLevelSalary(levelIds, selDate, userId, contractCache);
+                //4.更新用户签约余额
                 updateUserSignContractSum(userId, selDate);
             } else {
                 //进阶分享
@@ -192,7 +194,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         //更新最终收益
         InCome i = new InCome();
         i.setId(inCome.getId());
-        BigDecimal salary = inCome.getContractSalary().add(inCome.getShareSalary()).add(inCome.getManageSalary());
+        BigDecimal salary = inCome.getContractSalary().add(inCome.getShareSalary()).add(inCome.getManageSalary()).add(inCome.getSameLevelSalary());
         i.setSalary(salary);
         inComeService.updateById(i);
 
@@ -273,6 +275,84 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         inComeService.updateById(i);
 
         return advanceShareSalary;
+    }
+
+    /**
+     * 获取平级收益
+     *
+     * @param levelIds
+     * @param selDate
+     * @param userId
+     * @param contractCache
+     * @return
+     */
+    private BigDecimal getSameLevelSalary(Map<Integer, Map<String, Object>> levelIds, Date selDate, Integer userId, Map<Integer, Contract> contractCache) {
+        EntityWrapper<InCome> inComeEntityWrapper = new EntityWrapper<>();
+        inComeEntityWrapper
+                .eq("type", 1)
+                .eq("user_id", userId)
+                .eq("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
+        List<InCome> inComes = inComeService.selectList(inComeEntityWrapper);
+        if (inComes.size() == 0) {
+            //该用户没有合约收益 非签约合约用户 无平级奖
+            return new BigDecimal(0);
+        }
+        InCome inCome = inComes.get(0);
+
+        if (levelIds == null || levelIds.size() == 0) {
+            //无被推荐人
+            InCome finalIncome = new InCome();
+            finalIncome.setId(inCome.getId());
+            finalIncome.setSameLevelSalary(new BigDecimal(0));
+            inComeService.updateById(finalIncome);
+            return new BigDecimal(0);
+        }
+        String levelOneIds = levelIds.get(1).get("ids").toString();
+        String[] split = levelOneIds.split(",");
+        Integer directNumber = split.length;
+        if (directNumber == 0) {
+            //无直推用户
+            InCome finalIncome = new InCome();
+            finalIncome.setId(inCome.getId());
+            finalIncome.setManageSalary(new BigDecimal(0));
+            finalIncome.setIsCalMsalary(1);
+            inComeService.updateById(finalIncome);
+            return new BigDecimal(0);
+        }
+        //查询各种直推会员类型的信息
+        List<User> directUsers = userService.getDirectUserLevel(levelOneIds);
+        //查询当前用户信息
+        User currentUser = userService.selectById(userId);
+        if (currentUser.getLevel() == 0) {
+            //无身份 没有平级奖 更新用户的管理收益
+            InCome finalIncome = new InCome();
+            finalIncome.setId(inCome.getId());
+            finalIncome.setSameLevelSalary(new BigDecimal(0));
+            inComeService.updateById(finalIncome);
+            return new BigDecimal(0);
+        }
+        //从所有直推会员中获取直属收益
+        BigDecimal count = new BigDecimal(0);
+        for (User du : directUsers) {
+            if (du.getLevel() >= currentUser.getLevel()) {
+                //平级现象 直推会员等级高于当前用户 当前用户拿直推用户的管理奖的6%
+                //用户的所有被推荐人id
+                Map<Integer, Map<String, Object>> directLevelIds = userLevelService.selectRecedUserIds(Integer.parseInt(du.getId()));
+                //递归查询直推用户的管理奖
+                BigDecimal directUserManageSalary = this.getManageSalary(directLevelIds, selDate, Integer.parseInt(du.getId()), contractCache);
+                //平级用户管理奖带来的收益
+                BigDecimal directUserManageInCome = directUserManageSalary.multiply(new BigDecimal("0.06"));
+                logger.info("用户" + currentUser.getUserName() + "获取" + du.getUserName() + "的平级收益为" + directUserManageInCome);
+                count = count.add(directUserManageInCome);
+            }
+        }
+        //更新用户的管理收益
+        InCome finalIncome = new InCome();
+        finalIncome.setId(inCome.getId());
+        finalIncome.setSameLevelSalary(count);
+        inComeService.updateById(finalIncome);
+
+        return count;
     }
 
     /**
@@ -379,18 +459,19 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         //从所有直推会员中获取直属收益
         BigDecimal count = new BigDecimal(0);
         for (User du : directUsers) {
-            if (du.getLevel() >= currentUser.getLevel()) {
-                //平级现象 直推会员等级高于当前用户 当前用户拿直推用户的管理奖的6%
-
-                //用户的所有被推荐人id
-                Map<Integer, Map<String, Object>> directLevelIds = userLevelService.selectRecedUserIds(Integer.parseInt(du.getId()));
-                //递归查询直推用户的管理奖
-                BigDecimal directUserManageSalary = this.getManageSalary(directLevelIds, selDate, Integer.parseInt(du.getId()), contractCache);
-                //平级用户管理奖带来的收益
-                BigDecimal directUserManageInCome = directUserManageSalary.multiply(new BigDecimal("0.06"));
-                logger.info("用户" + currentUser.getUserName() + "获取" + du.getUserName() + "的平级收益为" + directUserManageInCome);
-                count = count.add(directUserManageInCome);
-            } else {
+//            if (du.getLevel() >= currentUser.getLevel()) {
+//                //平级现象 直推会员等级高于当前用户 当前用户拿直推用户的管理奖的6%
+//
+//                //用户的所有被推荐人id
+//                Map<Integer, Map<String, Object>> directLevelIds = userLevelService.selectRecedUserIds(Integer.parseInt(du.getId()));
+//                //递归查询直推用户的管理奖
+//                BigDecimal directUserManageSalary = this.getManageSalary(directLevelIds, selDate, Integer.parseInt(du.getId()), contractCache);
+//                //平级用户管理奖带来的收益
+//                BigDecimal directUserManageInCome = directUserManageSalary.multiply(new BigDecimal("0.06"));
+//                logger.info("用户" + currentUser.getUserName() + "获取" + du.getUserName() + "的平级收益为" + directUserManageInCome);
+//                count = count.add(directUserManageInCome);
+//            }
+            if (du.getLevel() < currentUser.getLevel()) {
                 //查询用户对应的合约信息
                 Contract contract = userContractService.selectContractByUserId(userId, 1);
                 if (contract == null) {
@@ -532,21 +613,21 @@ public class ContractDailyRewardServiceImpl implements RewardService {
             return new BigDecimal(sysConfigService.selectConfigByKey("share_one_rate"));
         } else if (generation == 2) {
             return new BigDecimal(sysConfigService.selectConfigByKey("share_two_rate"));
-        }else if (generation == 3) {
+        } else if (generation == 3) {
             return new BigDecimal(sysConfigService.selectConfigByKey("share_three_rate"));
-        }else if (generation == 4) {
+        } else if (generation == 4) {
             return new BigDecimal(sysConfigService.selectConfigByKey("share_four_rate"));
-        }else if (generation == 5) {
+        } else if (generation == 5) {
             return new BigDecimal(sysConfigService.selectConfigByKey("share_five_rate"));
-        }else if (generation == 6) {
+        } else if (generation == 6) {
             return new BigDecimal(sysConfigService.selectConfigByKey("share_six_rate"));
-        }else if (generation == 7) {
+        } else if (generation == 7) {
             return new BigDecimal(sysConfigService.selectConfigByKey("share_seven_rate"));
-        }else if (generation == 8) {
+        } else if (generation == 8) {
             return new BigDecimal(sysConfigService.selectConfigByKey("share_eight_rate"));
-        }else if (generation == 9) {
+        } else if (generation == 9) {
             return new BigDecimal(sysConfigService.selectConfigByKey("share_nine_rate"));
-        }else if (generation == 10) {
+        } else if (generation == 10) {
             return new BigDecimal(sysConfigService.selectConfigByKey("share_ten_rate"));
         }
         return new BigDecimal(0);
