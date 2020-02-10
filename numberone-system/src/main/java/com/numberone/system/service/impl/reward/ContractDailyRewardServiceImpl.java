@@ -392,7 +392,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
                 count = count.add(directUserManageInCome);
             } else {
                 //查询用户对应的合约信息
-                Contract contract = userContractService.selectContractByUserId(Integer.parseInt(du.getId()), 1);
+                Contract contract = userContractService.selectContractByUserId(userId, 1);
                 if (contract == null) {
                     logger.info("用户" + currentUser.getUserName() + "获取" + du.getUserName() + "的平级收益为" + 0);
                     continue;
