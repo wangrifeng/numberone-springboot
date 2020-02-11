@@ -9,7 +9,6 @@
     <version>3.2</version>
 
     <name>numberone</name>
-	<url>http://www.numberone.vip</url>
     <description>NumberOne管理系统</description>
     
     <properties>
@@ -45,7 +44,6 @@
 		<module>numberone-framework</module>
 		<module>numberone-system</module>
 		<module>numberone-quartz</module>
-		<module>numberone-generator</module>
         <module>numberone-common</module>
     </modules>
     <packaging>pom</packaging>
