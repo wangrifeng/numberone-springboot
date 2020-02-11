@@ -45,7 +45,6 @@
 		<module>numberone-framework</module>
 		<module>numberone-system</module>
 		<module>numberone-quartz</module>
-		<module>numberone-generator</module>
         <module>numberone-common</module>
     </modules>
     <packaging>pom</packaging>
