@@ -2,6 +2,8 @@ package com.numberone.system.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -444,5 +446,10 @@ public class SysUserServiceImpl implements ISysUserService
             throw new BusinessException("不允许修改超级管理员用户");
         }
         return userMapper.updateUser(user);
+    }
+
+    @Override
+    public List<Map<String, Object>> treeList() {
+        return this.userMapper.treeList();
     }
 }

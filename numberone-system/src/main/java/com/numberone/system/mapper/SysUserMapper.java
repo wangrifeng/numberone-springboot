@@ -1,6 +1,8 @@
 package com.numberone.system.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.numberone.system.domain.SysUser;
 
 /**
@@ -105,4 +107,10 @@ public interface SysUserMapper
      * @return 结果
      */
     public SysUser checkEmailUnique(String email);
+
+    /**
+     * 查询用用户树
+     * @return
+     */
+    List<Map<String, Object>> treeList();
 }

@@ -1,5 +1,6 @@
 package com.numberone.system.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -56,6 +57,18 @@ public class SysUser extends BaseEntity
 
     /** 盐加密 */
     private String salt;
+
+    /** 上级id **/
+    private String upUserId;
+
+    /** 工会人数 **/
+    private Integer memberSize;
+
+    /** 合约名称 **/
+    private String contractName;
+
+    /** 团队签约值 **/
+    private BigDecimal unionSignTotalMoney;
 
     /** 帐号状态（0正常 1停用） */
     @Excel(name = "帐号状态", readConverterExp = "0=正常,1=停用")
@@ -286,6 +299,38 @@ public class SysUser extends BaseEntity
     public void setPostIds(Long[] postIds)
     {
         this.postIds = postIds;
+    }
+
+    public String getUpUserId() {
+        return upUserId;
+    }
+
+    public void setUpUserId(String upUserId) {
+        this.upUserId = upUserId;
+    }
+
+    public Integer getMemberSize() {
+        return memberSize;
+    }
+
+    public void setMemberSize(Integer memberSize) {
+        this.memberSize = memberSize;
+    }
+
+    public BigDecimal getUnionSignTotalMoney() {
+        return unionSignTotalMoney;
+    }
+
+    public void setUnionSignTotalMoney(BigDecimal unionSignTotalMoney) {
+        this.unionSignTotalMoney = unionSignTotalMoney;
+    }
+
+    public String getContractName() {
+        return contractName;
+    }
+
+    public void setContractName(String contractName) {
+        this.contractName = contractName;
     }
 
     @Override
