@@ -1,6 +1,8 @@
 package com.numberone.system.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.numberone.system.domain.SysUser;
 
 /**
@@ -156,4 +158,10 @@ public interface ISysUserService
      * @return 结果
      */
     public int changeStatus(SysUser user);
+
+    /**
+     * 用户列表
+     * @return
+     */
+    List<Map<String, Object>> treeList();
 }

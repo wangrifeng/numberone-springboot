@@ -1,6 +1,8 @@
 package com.numberone.web.controller.system;
 
 import java.util.List;
+import java.util.Map;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,6 +58,12 @@ public class SysUserController extends BaseController
         return prefix + "/user";
     }
 
+    @GetMapping("/toUnion")
+    public String toUnion()
+    {
+        return "system/union/union";
+    }
+
     @RequiresPermissions("system:user:list")
     @PostMapping("/list")
     @ResponseBody
@@ -65,6 +73,16 @@ public class SysUserController extends BaseController
         List<SysUser> list = userService.selectUserList(user);
         return getDataTable(list);
     }
+
+    @GetMapping("/treeList")
+    @ResponseBody
+    public List<Map<String,Object>> treeList()
+    {
+        List<Map<String,Object>> list = userService.treeList();
+        return list;
+    }
+
+
 
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:user:export")
