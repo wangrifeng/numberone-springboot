@@ -93,7 +93,7 @@
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs " href="#" onclick="getWalletInfo(\'' + row.wallet_id + '\')"><i class="fa fa-info"></i>详情</a> ');
+                        actions.push('<a class="btn btn-success btn-xs " href="#" onclick="getWalletInfo(\'' + row.address + '\')"><i class="fa fa-info"></i>详情</a> ');
                         return actions.join('');
                     }
                 }
@@ -102,6 +102,7 @@
         $.table.init(options);
     });
     function getWalletInfo(id) {
+        var url = prefix+"/walletInfo?walletAddress="+id;
         var index = layer.open({
             type: 2,
             area: ['600px', '500px'],
@@ -110,7 +111,7 @@
             maxmin: true,
             shade: 0.3,
             title: "钱包详细",
-            content: prefix+"/walletInfo",
+            content: url,
             btn: ['关闭'],
             // 弹层外区域关闭
             shadeClose: true,
@@ -119,7 +120,6 @@
             }
         });
         layer.full(index);
-        alert(id);
     }
 </script>
 </body>

@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -39,11 +40,9 @@ public class WalletController {
 
     @GetMapping("/walletInfo")
     @ApiOperation("/钱包信息")
-    public ModelAndView walletInfo(@RequestParam Map<String,Object> params) {
-        ModelAndView model = new ModelAndView();
-        model.setViewName(prefix+"/walletInfo");
-        model.addObject("params",params);
-        return model;
+    public String walletInfo(@RequestParam Map<String,Object> params,ModelMap mmap) {
+        mmap.put("wallet",params);
+        return prefix+"/walletInfo";
     }
 
     @PostMapping("/list")
@@ -55,13 +54,11 @@ public class WalletController {
         return getDataTable(list);
     }
 
-    @PostMapping("/cashOut")
+    @PostMapping("/transaction")
     @ResponseBody
-    @ApiOperation("/提现记录列表")
-    public TableDataInfo cashOut() {
+    @ApiOperation("/交易记录列表")
+    public TableDataInfo transaction(@RequestParam Map<String,Object> params) {
         startPage();
-        Map<String,Object> params = new HashMap<>();
-        params.put("transactionType","1");
         List<Map<String,Object>> list = transactionService.getTransaction(params);
         return getDataTable(list);
     }

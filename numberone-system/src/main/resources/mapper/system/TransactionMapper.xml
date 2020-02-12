@@ -30,6 +30,9 @@
         <if test='transactionType!=null and transactionType!=""'>
             and transaction_type=#{transactionType}
         </if>
+        <if test='walletAddress!=null and walletAddress!=""'>
+            and (from_wallet_address=#{walletAddress} or to_wallet_address=#{walletAddress})
+        </if>
     </select>
 
 </mapper>
