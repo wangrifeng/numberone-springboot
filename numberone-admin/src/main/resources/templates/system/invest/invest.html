@@ -11,8 +11,24 @@
             <form id="post-form">
                 <div class="select-list">
                     <ul>
+                        <li class="select-time">
+                            <label>充值时间： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="startTime"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="endTime"/>
+                        </li>
                         <li>
-                            日期：<input type="text" name="selDate"/>
+                            充值人员：<input type="text" name="investUserName"/>
+                        </li>
+                        <li>
+                            充值地址：<input type="text" name="invest_address"/>
+                        </li>
+                        <li>
+                            充值币种：<select name="invest_wallet_type" >
+                            <option value="">所有</option>
+                            <option th:value="0">USDT</option>
+                            <option th:value="1">MDC</option>
+                        </select>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
@@ -63,15 +79,34 @@
 				},
                 {
                     field: 'create_time',
-                    title: '时间'
+                    title: '充值时间'
                 },
 				{
 					field: 'toUserName',
 					title: '充值人员'
 				},
                 {
+                    field: 'to_wallet_address',
+                    title: '充值地址'
+                },
+                {
                     field: 'to_amount',
-                    title: '充值数量（USDT）'
+                    title: '充值数量'
+                },
+                {
+                    field: 'to_wallet_type',
+                    title: '充值币种',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if(row.to_wallet_type == '0'){
+                            actions.push('USDT');
+                        }else if(row.to_wallet_type == '1'){
+                            actions.push('MDC');
+                        }else{
+                            actions.push('');
+                        }
+                        return actions.join('');
+                    }
                 },
                 {
                     field: 'transactionStatus',

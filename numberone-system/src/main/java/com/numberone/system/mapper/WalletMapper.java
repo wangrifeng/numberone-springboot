@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.numberone.system.domain.Wallet;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  *  Mapper 接口
@@ -14,5 +17,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public interface WalletMapper extends BaseMapper<Wallet> {
+
+    List<Map<String,Object>> getWallets(Map<String,Object> params);
 
 }

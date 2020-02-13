@@ -4,7 +4,11 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.numberone.system.domain.Wallet;
 import com.numberone.system.mapper.WalletMapper;
 import com.numberone.system.service.WalletService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -17,4 +21,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class WalletServiceImpl extends ServiceImpl<WalletMapper, Wallet> implements WalletService {
 
+    private final WalletMapper walletMapper;
+
+    @Autowired
+    public WalletServiceImpl(WalletMapper walletMapper){
+        this.walletMapper =walletMapper;
+    }
+
+    @Override
+    public List<Map<String, Object>> getWallet(Map<String, Object> params) {
+        return walletMapper.getWallets(params);
+    }
 }

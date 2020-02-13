@@ -6,57 +6,59 @@ import com.numberone.common.page.PageDomain;
 import com.numberone.common.page.TableDataInfo;
 import com.numberone.common.page.TableSupport;
 import com.numberone.common.utils.StringUtils;
-import com.numberone.system.domain.Transaction;
 import com.numberone.system.service.TransactionService;
+import com.numberone.system.service.WalletService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/system/invest")
-@Api("充值记录")
-public class InvestController {
+@RequestMapping("/system/wallet")
+@Api("钱包信息")
+public class WalletController {
 
     @Autowired
     private TransactionService transactionService;
 
-    private String prefix = "system/invest";
+    @Autowired
+    private WalletService walletService;
+    private String prefix = "system/wallet";
 
     @GetMapping()
     public String operlog()
     {
-        return prefix + "/invest";
+        return prefix + "/wallet";
     }
 
-    @GetMapping("/cashOutHtml")
-    public String cashOutHtml()
-    {
-        return  "system/cashOut/cashOut";
+    @GetMapping("/walletInfo")
+    @ApiOperation("/钱包信息")
+    public String walletInfo(@RequestParam Map<String,Object> params,ModelMap mmap) {
+        mmap.put("wallet",params);
+        return prefix+"/walletInfo";
     }
 
     @PostMapping("/list")
     @ResponseBody
-    @ApiOperation("/充值记录列表")
+    @ApiOperation("/钱包信息")
     public TableDataInfo list(@RequestParam Map<String,Object> params) {
         startPage();
-        params.put("transactionType","0");
-        List<Map<String,Object>> list = transactionService.getTransaction(params);
+        List<Map<String,Object>> list = walletService.getWallet(params);
         return getDataTable(list);
     }
 
-    @PostMapping("/cashOut")
+    @PostMapping("/transaction")
     @ResponseBody
-    @ApiOperation("/提现记录列表")
-    public TableDataInfo cashOut() {
+    @ApiOperation("/交易记录列表")
+    public TableDataInfo transaction(@RequestParam Map<String,Object> params) {
         startPage();
-        Map<String,Object> params = new HashMap<>();
-        params.put("transactionType","1");
         List<Map<String,Object>> list = transactionService.getTransaction(params);
         return getDataTable(list);
     }
