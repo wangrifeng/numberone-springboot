@@ -2,10 +2,12 @@ package com.numberone.web.controller.system;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.numberone.common.base.AjaxResult;
 import com.numberone.common.page.PageDomain;
 import com.numberone.common.page.TableDataInfo;
 import com.numberone.common.page.TableSupport;
 import com.numberone.common.utils.StringUtils;
+import com.numberone.framework.web.base.BaseController;
 import com.numberone.system.domain.Transaction;
 import com.numberone.system.service.TransactionService;
 import io.swagger.annotations.Api;
@@ -13,15 +15,18 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.web3j.crypto.CipherException;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 @Controller
 @RequestMapping("/system/invest")
 @Api("充值记录")
-public class InvestController {
+public class InvestController extends BaseController {
 
     @Autowired
     private TransactionService transactionService;
@@ -59,6 +64,23 @@ public class InvestController {
         params.put("transactionType","1");
         List<Map<String,Object>> list = transactionService.getTransaction(params);
         return getDataTable(list);
+    }
+
+    @PostMapping("/personHandleCashOut")
+    @ResponseBody
+    @ApiOperation("/人工审核提现")
+    public AjaxResult personHandleCashOut(@RequestParam Map<String,Object> params) {
+        String ids = (String) params.get("ids");
+        if(ids == null || "".equals(ids)){
+            return toAjax(0);
+        }else{
+            try {
+                return transactionService.personHandleCashOut(params);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return AjaxResult.error(e.getMessage());
+            }
+        }
     }
 
 

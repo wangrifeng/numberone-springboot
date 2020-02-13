@@ -24,6 +24,7 @@
                                     when '0' then '交易中'
                                     when '1' then '交易成功'
                 end transactionStatus,
+               transaction_status,
             transaction_hash
         from mdc_transaction
         where 0 = 0
