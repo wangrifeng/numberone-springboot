@@ -30,8 +30,41 @@
         <if test='transactionType!=null and transactionType!=""'>
             and transaction_type=#{transactionType}
         </if>
+        <if test='startTime!=null and startTime!=""'>
+            <![CDATA[
+					and create_time >= #{startTime}
+			]]>
+        </if>
+        <if test='endTime!=null and endTime!=""'>
+            <![CDATA[
+					and create_time <= #{endTime}
+			]]>
+        </if>
         <if test='walletAddress!=null and walletAddress!=""'>
             and (from_wallet_address=#{walletAddress} or to_wallet_address=#{walletAddress})
+        </if>
+        <if test='invest_address!=null and invest_address!=""'>
+            <bind name="_investAddress" value="'%'+invest_address+'%'"/>
+            and to_wallet_address like #{_investAddress}
+        </if>
+        <if test='invest_wallet_type!=null and invest_wallet_type!=""'>
+            and to_wallet_type = #{invest_wallet_type}
+        </if>
+        <if test="investUserName !=null and investUserName !=''">
+            <bind name="_investUserName" value="'%'+investUserName+'%'"/>
+            and to_user_id in  (Select user_id from sys_user where user_name like #{_investUserName})
+        </if>
+
+        <if test='cashOut_address!=null and cashOut_address!=""'>
+            <bind name="_cashOutAddress" value="'%'+cashOut_address+'%'"/>
+            and from_wallet_address like #{_cashOutAddress}
+        </if>
+        <if test='cashOut_wallet_type!=null and cashOut_wallet_type!=""'>
+            and from_wallet_type = #{cashOut_wallet_type}
+        </if>
+        <if test="cashOutUserName !=null and cashOutUserName !=''">
+            <bind name="_cashOutUserName" value="'%'+cashOutUserName+'%'"/>
+            and from_user_id in  (Select user_id from sys_user where user_name like #{_cashOutUserName})
         </if>
     </select>
 
