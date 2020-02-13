@@ -190,7 +190,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select
         user_name as name ,
         'false' as checked ,
-        up_user_id as pid,
+        up_user_id as pId,
         user_id as id ,
         user_name as title
         from
