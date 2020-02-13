@@ -131,7 +131,8 @@ public class TransactionServiceImpl extends ServiceImpl<TransactionMapper, Trans
         }else{
             SysConfig walletPath = configMapper.checkConfigKeyUnique("WALLET_PATH");
             SysConfig walletAddress = configMapper.checkConfigKeyUnique("WALLET_ADDRESS");
-            String wallet_Path = "D://walletTrue//UTC--2020-02-07T13-31-22.32000000Z--eb04131fbe988d43c0f9c0d8a30ccc3636994dda.json";
+            //String wallet_Path = "D://walletTrue//UTC--2020-02-07T13-31-22.32000000Z--eb04131fbe988d43c0f9c0d8a30ccc3636994dda.json";
+            String wallet_Path = walletPath.getConfigValue();
             AjaxResult transactionHash = transfer("123456",transaction.getToAmount(),wallet_Path,walletAddress.getConfigValue(),transaction.getToWalletAddress(),"0");
             if("0".equals(transactionHash.get("code").toString())){
                 transaction.setTransactionHash(transactionHash.get("msg").toString());
