@@ -2,12 +2,14 @@ package com.numberone.system.mapper;
 
 import java.util.List;
 import com.numberone.system.domain.SysConfig;
+import org.springframework.stereotype.Component;
 
 /**
  * 参数配置 数据层
  * 
  * @author numberone
  */
+@Component
 public interface SysConfigMapper
 {
     /**
