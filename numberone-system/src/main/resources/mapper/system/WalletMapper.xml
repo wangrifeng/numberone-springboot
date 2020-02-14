@@ -29,4 +29,8 @@
         order by w.create_time desc,w.ustd_blance desc,w.mdc_blance desc
     </select>
 
+    <select id="getBalanceSum" resultType="java.util.Map">
+        select sum(ustd_blance) usdtBalance,sum(mdc_blance) mdcBalance from mdc_wallet
+    </select>
+
 </mapper>

@@ -3,15 +3,13 @@ package com.numberone.system.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.numberone.system.domain.User;
 import com.numberone.system.domain.UserContract;
-import com.numberone.system.service.ISysIndexService;
-import com.numberone.system.service.InComeService;
-import com.numberone.system.service.UserContractService;
-import com.numberone.system.service.UserService;
+import com.numberone.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -29,6 +27,10 @@ public class ISysIndexServiceImpl implements ISysIndexService {
     private UserContractService userContractService;
     @Autowired
     private InComeService inComeService;
+    @Autowired
+    private WalletService walletService;
+    @Autowired
+    private TransactionService transactionService;
     @Override
     public Map<String, Object> mainInfo() {
         Future<Integer> userCountFuture = executor.submit(() -> {
@@ -39,6 +41,8 @@ public class ISysIndexServiceImpl implements ISysIndexService {
         Future<Integer> userContractNumberFuture = executor.submit(() -> userContractService.selectSignCount());
         Future<Integer> todayNewPersonCountFuture = executor.submit(() -> userService.todayNewPersonCount());
         Future<BigDecimal> yesterdaySignIncomeCountFuture = executor.submit(() -> inComeService.yesterdaySignIncomeCount());
+        Future<Map<String,Object>> balanceSum = executor.submit(() -> walletService.balanceSum());
+        Future<Map<String,Object>> amountSum = executor.submit(() -> transactionService.investCashOutSize());
 
         Map<String,Object> result = new HashMap<>();
         try {
@@ -46,6 +50,10 @@ public class ISysIndexServiceImpl implements ISysIndexService {
             result.put("userContractNumber",userContractNumberFuture.get());
             result.put("todayNewPersonCount",todayNewPersonCountFuture.get());
             result.put("yesterdaySignIncomeCount",yesterdaySignIncomeCountFuture.get());
+            result.put("usdtBalance",balanceSum.get().get("usdtBalance"));
+            result.put("mdcBalance",balanceSum.get().get("mdcBalance"));
+            result.put("invest",amountSum.get().get("invest"));
+            result.put("cashOut",amountSum.get().get("cashOut"));
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

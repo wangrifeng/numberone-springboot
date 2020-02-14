@@ -52,28 +52,28 @@
                             <a href="javascript:;" class="x-admin-backlog-body">
                                 <h3>USTD 数</h3>
                                 <p>
-                                    <cite>99</cite></p>
+                                    <cite id="usdtBalance">99</cite></p>
                             </a>
                         </li>
                         <li class="layui-col-md2 layui-col-xs6">
                             <a href="javascript:;" class="x-admin-backlog-body">
                                 <h3>MDC 数</h3>
                                 <p>
-                                    <cite>67</cite></p>
+                                    <cite id="mdcBalance">67</cite></p>
                             </a>
                         </li>
                         <li class="layui-col-md2 layui-col-xs6">
                             <a href="javascript:;" class="x-admin-backlog-body">
                                 <h3>充值USTD 数</h3>
                                 <p>
-                                    <cite>67</cite></p>
+                                    <cite id="invest">67</cite></p>
                             </a>
                         </li>
                         <li class="layui-col-md2 layui-col-xs6 ">
                             <a href="javascript:;" class="x-admin-backlog-body">
                                 <h3>提现USTD 数</h3>
                                 <p>
-                                    <cite>6766</cite></p>
+                                    <cite id="cashOut">6766</cite></p>
                             </a>
                         </li>
                     </ul>
@@ -150,6 +150,10 @@
                     $("#userContractNumber").html(result.data.userContractNumber);
                     $("#todayNewPersonCount").html(result.data.todayNewPersonCount);
                     $("#yesterdaySignIncomeCount").html(result.data.yesterdaySignIncomeCount);
+                    $("#usdtBalance").html(result.data.usdtBalance);
+                    $("#mdcBalance").html(result.data.mdcBalance);
+                    $("#invest").html(result.data.invest);
+                    $("#cashOut").html(result.data.cashOut);
                 } else {
                     $.modal.msgError(result.msg);
                 }

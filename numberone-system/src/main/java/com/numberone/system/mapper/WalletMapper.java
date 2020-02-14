@@ -20,4 +20,6 @@ public interface WalletMapper extends BaseMapper<Wallet> {
 
     List<Map<String,Object>> getWallets(Map<String,Object> params);
 
+    Map<String,Object> getBalanceSum(Map<String,Object> params);
+
 }

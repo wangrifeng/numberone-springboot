@@ -20,4 +20,5 @@ public interface TransactionMapper extends BaseMapper<Transaction> {
 
     List<Map<String,Object>> getTransaction(Map<String,Object> params);
 
+    List<Map<String,Object>> transactionAmountSum(Map<String,Object> params);
 }

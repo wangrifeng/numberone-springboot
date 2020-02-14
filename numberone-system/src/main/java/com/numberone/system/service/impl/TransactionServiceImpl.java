@@ -146,6 +146,27 @@ public class TransactionServiceImpl extends ServiceImpl<TransactionMapper, Trans
         return AjaxResult.success();
     }
 
+    @Override
+    public Map<String, Object> investCashOutSize() {
+        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> params = new HashMap<>();
+        params.put("transactionType","0");
+        List<Map<String,Object>> invest =  transactionMapper.transactionAmountSum(params);
+        if(invest.size() > 0){
+            map.put("invest",invest.get(0).get("invest"));
+        }else{
+            map.put("invest",0);
+        }
+        params.put("transactionType","1");
+        List<Map<String,Object>> cashOut =  transactionMapper.transactionAmountSum(params);
+        if(cashOut.size() > 0){
+            map.put("cashOut",cashOut.get(0).get("cashOut"));
+        }else{
+            map.put("cashOut",0);
+        }
+        return map;
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public AjaxResult transfer(String payPassword, BigDecimal trans, String fromPath, String fromAddress, String toAddress, String walletType) throws IOException, CipherException, ExecutionException, InterruptedException {
 

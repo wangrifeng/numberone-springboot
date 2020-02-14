@@ -73,4 +73,20 @@
         </if>
     </select>
 
+    <select id="transactionAmountSum" resultType="java.util.Map">
+        select
+
+            sum(from_amount) cashOut,
+            sum(to_amount) invest,
+            transaction_type
+
+        from mdc_transaction
+        where transaction_status = '1'
+        <if test='transactionType!=null and transactionType!=""'>
+            and transaction_type = #{transactionType}
+        </if>
+        group by transaction_type
+
+    </select>
+
 </mapper>

@@ -25,6 +25,7 @@ import java.security.NoSuchProviderException;
 import java.util.Date;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -164,5 +165,10 @@ public class WalletServiceImpl extends ServiceImpl<WalletMapper, Wallet> impleme
 
 
         return AjaxResult.success();
+    }
+
+    @Override
+    public Map<String,Object> balanceSum() {
+        return walletMapper.getBalanceSum(new HashMap<>());
     }
 }
