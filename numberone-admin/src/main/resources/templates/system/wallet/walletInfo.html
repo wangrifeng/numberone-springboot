@@ -2,73 +2,85 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org"
       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <meta charset="utf-8">
-<head th:include="include :: header"></head>
+<head th:include="include :: header">
+    <link th:href="@{/lib/layui/css/layui.css}" rel="stylesheet"/>
+</head>
 <body class="gray-bg">
 
-<div class="container-div">
-    <div class="row">
-        <div class="col-sm-12 search-collapse">
-            <form id="post-form" >
-                <div class="select-list">
-                    <input id="walletAddress" th:value="${wallet.walletAddress}" type="hidden" />
-                    <ul>
-                        <li class="select-time">
-                            <label>交易时间： </label>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="startTime"/>
-                            <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="endTime"/>
-                        </li>
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#trans" role="tab" data-toggle="tab">转账</a></li>
+    <li role="presentation"><a href="#investCashOut" role="tab" data-toggle="tab">充值提现</a></li>
+    <li role="presentation"><a href="#contract" role="tab" data-toggle="tab">合约</a></li>
+</ul>
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="trans">
+        <div class="container-div">
+            <div class="row">
+                <div class="col-sm-12 search-collapse">
+                    <form id="post-form" >
+                        <div class="select-list">
+                            <input id="walletAddress" th:value="${wallet.walletAddress}" type="hidden" />
+                            <ul>
+                                <li class="select-time">
+                                    <label>交易时间： </label>
+                                    <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="startTime"/>
+                                    <span>-</span>
+                                    <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="endTime"/>
+                                </li>
 
-                        <li>
-                            交易类型：<select name="transactionType" >
-                            <option value="">所有</option>
-                            <option th:value="0">充值</option>
-                            <option th:value="1">提现</option>
-                            <option th:value="2">转账</option>
-                            <option th:value="3">推广奖励</option>
-                            <option th:value="4">购买合约</option>
-                            <option th:value="5">购买进阶卡</option>
-                            <option th:value="6">每日收益结算</option>
-                            <option th:value="7">mdc兑换usdt</option>
-                        </select>
-                        </li>
-                        <li>
-                            交易状态：<select name="transactionStatus" >
-                            <option value="">所有</option>
-                            <option th:value="0">交易中</option>
-                            <option th:value="1">交易成功</option>
-                            <option th:value="-1">交易失败</option>
-                            <option th:value="-2">审核不通过</option>
-                        </select>
-                        </li>
-                        <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
-                                    class="fa fa-search"></i>&nbsp;搜索</a>
-                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
-                                    class="fa fa-refresh"></i>&nbsp;重置</a>
-                        </li>
-                    </ul>
+                                <li>
+                                    交易类型：<select name="transactionType" >
+                                    <option value="">所有</option>
+                                    <option th:value="0">充值</option>
+                                    <option th:value="1">提现</option>
+                                    <option th:value="2">转账</option>
+                                    <option th:value="3">推广奖励</option>
+                                    <option th:value="4">购买合约</option>
+                                    <option th:value="5">购买进阶卡</option>
+                                    <option th:value="6">每日收益结算</option>
+                                    <option th:value="7">mdc兑换usdt</option>
+                                    <option th:value="8">扣费</option>
+                                </select>
+                                </li>
+                                <li>
+                                    交易状态：<select name="transactionStatus" >
+                                    <option value="">所有</option>
+                                    <option th:value="0">交易中</option>
+                                    <option th:value="1">交易成功</option>
+                                    <option th:value="-1">交易失败</option>
+                                    <option th:value="-2">审核不通过</option>
+                                </select>
+                                </li>
+                                <li>
+                                    <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                            class="fa fa-search"></i>&nbsp;搜索</a>
+                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                            class="fa fa-refresh"></i>&nbsp;重置</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
                 </div>
-            </form>
-        </div>
 
-        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-            <!--				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:post:export">-->
-            <!--		            <i class="fa fa-download"></i> 导出-->
-            <!--		        </a>-->
-        </div>
+                <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+                    <!--				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:post:export">-->
+                    <!--		            <i class="fa fa-download"></i> 导出-->
+                    <!--		        </a>-->
+                </div>
 
-        <div class="col-sm-12 select-table table-striped">
-            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+                <div class="col-sm-12 select-table table-striped">
+                    <table id="bootstrap-table" data-mobile-responsive="true"></table>
+                </div>
+            </div>
         </div>
     </div>
+    <div role="tabpanel" class="tab-pane" id="investCashOut">充值</div>
+    <div role="tabpanel" class="tab-pane" id="contract">合约</div>
 </div>
+
+
 <div th:include="include :: footer"></div>
-<script type="text/html" id="rightBar">
-    <div class="layui-btn-group">
-        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="info"><i class="fa fa-trash-o" title="详情">详情</i></a>
-    </div>
-</script>
+
 <script th:inline="javascript">
     // var editFlag = [[${@permission.hasPermi('system:post:edit')}]];
     // var removeFlag = [[${@permission.hasPermi('system:post:remove')}]];
@@ -104,10 +116,6 @@
                     title: '用户名称'
                 },
                 {
-                    field: 'from_wallet_address',
-                    title: '交易地址'
-                },
-                {
                     field: 'from_amount',
                     title: '交易数量'
                 },
@@ -129,10 +137,6 @@
                 {
                     field: 'toUserName',
                     title: '到账人员'
-                },
-                {
-                    field: 'to_wallet_address',
-                    title: '到账地址'
                 },
                 {
                     field: 'to_amount',
@@ -181,6 +185,8 @@
                             actions.push('每日收益结算');
                         }else if(row.transaction_type == '7'){
                             actions.push('mdc兑换usdt');
+                        }else if(row.transaction_type == '8'){
+                            actions.push('扣费');
                         }else{
                             actions.push('');
                         }

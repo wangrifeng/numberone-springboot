@@ -3,7 +3,9 @@ package com.numberone.system.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.numberone.common.base.AjaxResult;
+import com.numberone.system.domain.Transaction;
 import com.numberone.system.domain.Wallet;
+import com.numberone.system.mapper.TransactionMapper;
 import com.numberone.system.mapper.WalletMapper;
 import com.numberone.system.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +40,12 @@ import java.util.Map;
 public class WalletServiceImpl extends ServiceImpl<WalletMapper, Wallet> implements WalletService {
 
     private final WalletMapper walletMapper;
+    private final TransactionMapper transactionMapper;
 
     @Autowired
-    public WalletServiceImpl(WalletMapper walletMapper) {
+    public WalletServiceImpl(WalletMapper walletMapper,TransactionMapper transactionMapper) {
         this.walletMapper = walletMapper;
+        this.transactionMapper = transactionMapper;
     }
 
     @Override
@@ -86,15 +90,79 @@ public class WalletServiceImpl extends ServiceImpl<WalletMapper, Wallet> impleme
     public AjaxResult changeBalance(Map<String, Object> params) {
         EntityWrapper<Wallet> wrapper = new EntityWrapper<>();
         wrapper.eq("address", params.get("walletAddress"));
-        Wallet wallet = new Wallet();
+        Wallet wallet = walletMapper.selectList(wrapper).get(0);
+
+        BigDecimal oldUsdtBalance = new BigDecimal(params.get("MdcChange").toString());
+        BigDecimal usdtChange = new BigDecimal(params.get("usdtChange").toString());
+        BigDecimal oldMdcBalance = new BigDecimal(params.get("oldMdcBalance").toString());
+        BigDecimal MdcChange = new BigDecimal(params.get("MdcChange").toString());
         if ("0".equals(params.get("type"))) {
-            wallet.setUstdBlance(new BigDecimal(params.get("oldUsdtBalance").toString()).add(new BigDecimal(params.get("usdtChange").toString())));
-            wallet.setMdcBlance(new BigDecimal(params.get("oldMdcBalance").toString()).add(new BigDecimal(params.get("MdcChange").toString())));
+            wallet.setUstdBlance(oldUsdtBalance.add(usdtChange));
+            wallet.setMdcBlance(oldMdcBalance.add(MdcChange));
+            if(usdtChange.doubleValue() > 0){
+                Transaction transaction = new Transaction();
+                transaction.setCreateTime(new Date());
+                transaction.setToAmount(usdtChange);
+                transaction.setToUserId(wallet.getUserId());
+                transaction.setToWalletAddress(wallet.getAddress());
+                //0-usdt
+                transaction.setToWalletType("0");
+                //0-待交易
+                transaction.setTransactionStatus("1");
+                //0-充值
+                transaction.setTransactionType("0");
+                transactionMapper.insert(transaction);
+            }
+            if(MdcChange.doubleValue() > 0){
+                Transaction transaction = new Transaction();
+                transaction.setCreateTime(new Date());
+                transaction.setToAmount(MdcChange);
+                transaction.setToUserId(wallet.getUserId());
+                transaction.setToWalletAddress(wallet.getAddress());
+                //0-usdt
+                transaction.setToWalletType("1");
+                //0-待交易
+                transaction.setTransactionStatus("1");
+                //0-充值
+                transaction.setTransactionType("0");
+                transactionMapper.insert(transaction);
+            }
         } else if ("1".equals(params.get("type"))) {
-            wallet.setUstdBlance(new BigDecimal(params.get("oldUsdtBalance").toString()).subtract(new BigDecimal(params.get("usdtChange").toString())));
-            wallet.setMdcBlance(new BigDecimal(params.get("oldMdcBalance").toString()).subtract(new BigDecimal(params.get("MdcChange").toString())));
+            wallet.setUstdBlance(oldUsdtBalance.subtract(usdtChange));
+            wallet.setMdcBlance(oldMdcBalance.subtract(MdcChange));
+            if(usdtChange.doubleValue() > 0){
+                Transaction transaction = new Transaction();
+                transaction.setCreateTime(new Date());
+                transaction.setToAmount(usdtChange);
+                transaction.setToUserId(wallet.getUserId());
+                transaction.setToWalletAddress(wallet.getAddress());
+                //0-usdt
+                transaction.setToWalletType("0");
+                //0-待交易
+                transaction.setTransactionStatus("1");
+                //0-充值
+                transaction.setTransactionType("8");
+                transactionMapper.insert(transaction);
+            }
+            if(MdcChange.doubleValue() > 0){
+                Transaction transaction = new Transaction();
+                transaction.setCreateTime(new Date());
+                transaction.setToAmount(MdcChange);
+                transaction.setToUserId(wallet.getUserId());
+                transaction.setToWalletAddress(wallet.getAddress());
+                //0-usdt
+                transaction.setToWalletType("1");
+                //0-待交易
+                transaction.setTransactionStatus("1");
+                //0-充值
+                transaction.setTransactionType("8");
+                transactionMapper.insert(transaction);
+            }
         }
         walletMapper.update(wallet, wrapper);
+
+
+
         return AjaxResult.success();
     }
 }
