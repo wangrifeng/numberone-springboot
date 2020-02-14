@@ -4,7 +4,7 @@
 
     <select id="list" resultType="com.numberone.system.domain.InCome">
         select
-        id ,
+        m.id ,
         m.user_id as userId,
         contract_salary as contractSalary ,
         share_salary as shareSalary ,
@@ -12,11 +12,23 @@
         same_level_salary as sameLevelSalary ,
         salary ,
         sel_date as selDate ,
-        u.user_name as userName
+        u.user_name as userName ,
+        c.level,
+        c.name as contractName
         from
         mdc_income m
         left join sys_user u on u.user_id = m.user_id
+        left join sys_contract c on c.id =  m.contract_id
         where m.type = 1
+        <if test="map.selDate != null and map.selDate != ''">
+            and m.sel_date like concat(left(#{map.selDate},10),'%')
+        </if>
+        <if test="map.userName != null and map.userName != ''">
+            and u.user_name like concat('%',#{map.userName},'%')
+        </if>
+        <if test="map.level != null and map.level != ''">
+            and c.type =1 and c.level = #{map.level}
+        </if>
         order by sel_date desc , salary desc
     </select>
 

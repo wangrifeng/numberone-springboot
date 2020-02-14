@@ -43,6 +43,7 @@ public interface InComeMapper extends BaseMapper<InCome> {
     /**
      * 查询收益列表
      * @return
+     * @param params
      */
-    List<InCome> list();
+    List<InCome> list(@Param("map") Map<String, Object> params);
 }

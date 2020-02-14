@@ -72,6 +72,9 @@ public class InCome {
     @TableField(exist = false)
     private String userName;
 
+    @TableField(exist = false)
+    private String contractName;
+
     public InCome() {
     }
 
