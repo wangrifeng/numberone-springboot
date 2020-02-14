@@ -75,7 +75,7 @@
                 },
                 {
                     field: 'fromUserName',
-                    title: '交易人员'
+                    title: '用户名称'
                 },
                 {
                     field: 'from_wallet_address',
@@ -134,9 +134,9 @@
                         var actions = [];
                         if(row.transaction_type == '0'){
                             actions.push('充值');
-                        }else if(row.to_wallet_type == '1'){
+                        }else if(row.transaction_type == '1'){
                             actions.push('提现');
-                        }else if(row.to_wallet_type == '2'){
+                        }else if(row.transaction_type == '2'){
                             if(row.from_wallet_address == walletAddress){
                                 actions.push('转出');
                             }else if(row.to_wallet_address == walletAddress){
@@ -145,15 +145,15 @@
                                 actions.push('转账');
                             }
 
-                        }else if(row.to_wallet_type == '3'){
+                        }else if(row.transaction_type == '3'){
                             actions.push('推广奖励');
-                        }else if(row.to_wallet_type == '4'){
+                        }else if(row.transaction_type == '4'){
                             actions.push('购买合约');
-                        }else if(row.to_wallet_type == '5'){
+                        }else if(row.transaction_type == '5'){
                             actions.push('购买进阶卡');
-                        }else if(row.to_wallet_type == '6'){
+                        }else if(row.transaction_type == '6'){
                             actions.push('每日收益结算');
-                        }else if(row.to_wallet_type == '7'){
+                        }else if(row.transaction_type == '7'){
                             actions.push('mdc兑换usdt');
                         }else{
                             actions.push('');
@@ -163,7 +163,7 @@
                 },
                 {
                     field: 'transactionStatus',
-                    title: '充值状态'
+                    title: '状态'
                 }
             ]
         };
