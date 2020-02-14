@@ -27,4 +27,10 @@ public interface UserService extends IService<User> {
      * @return
      */
     AjaxResult add(String userName, String loginName, String password, String walletPassword, Integer sendCode, Integer registerType);
+
+    /**
+     * 今日签约用户总数
+     * @return
+     */
+    Integer todayNewPersonCount();
 }

@@ -35,4 +35,9 @@ public class UserContractServiceImpl extends ServiceImpl<UserContractMapper, Use
     public UserContract getUserContractByTypeAndUserId(Integer userId, Integer type) {
         return this.baseMapper.getUserContractByTypeAndUserId(userId,type);
     }
+
+    @Override
+    public Integer selectSignCount() {
+        return this.baseMapper.selectSignCount();
+    }
 }

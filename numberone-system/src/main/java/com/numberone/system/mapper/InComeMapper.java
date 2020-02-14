@@ -46,4 +46,11 @@ public interface InComeMapper extends BaseMapper<InCome> {
      * @param params
      */
     List<InCome> list(@Param("map") Map<String, Object> params);
+
+    /**
+     * 昨日签约收益总额
+     * @param yesterday
+     * @return
+     */
+    BigDecimal yesterdaySignIncomeCount(Date yesterday);
 }

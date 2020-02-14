@@ -18,4 +18,10 @@ public interface UserContractMapper extends BaseMapper<UserContract> {
      * @return
      */
     UserContract getUserContractByTypeAndUserId(@Param("userId") Integer userId, @Param("type") Integer type);
+
+    /**
+     * 查询签约合约总数
+     * @return
+     */
+    Integer selectSignCount();
 }

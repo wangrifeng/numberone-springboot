@@ -35,4 +35,10 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Select("select user_id as id,user_name as userName,level from sys_user where find_in_set(user_id,#{0})")
     List<User> getDirectUserLevel(String ids);
+
+    /**
+     * 今日新增用户总数
+     * @return
+     */
+    Integer todayNewPersonCount();
 }

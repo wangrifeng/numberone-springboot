@@ -7,6 +7,7 @@ import com.numberone.system.service.InComeService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -35,5 +36,14 @@ public class InComeServiceImpl extends ServiceImpl<InComeMapper, InCome> impleme
     @Override
     public List<InCome> list(Map<String, Object> params) {
         return this.baseMapper.list(params);
+    }
+
+    @Override
+    public BigDecimal yesterdaySignIncomeCount() {
+        Calendar instance = Calendar.getInstance();
+        instance.setTime(new Date());
+        instance.add(Calendar.DAY_OF_MONTH, -1); //当前时间减去一天，即一天前的时间
+        Date yesterday = instance.getTime();
+        return this.baseMapper.yesterdaySignIncomeCount(yesterday);
     }
 }
