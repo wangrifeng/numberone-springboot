@@ -2,14 +2,20 @@ package com.numberone.web.controller.system;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.numberone.common.annotation.Log;
+import com.numberone.common.base.AjaxResult;
+import com.numberone.common.enums.BusinessType;
 import com.numberone.common.page.PageDomain;
 import com.numberone.common.page.TableDataInfo;
 import com.numberone.common.page.TableSupport;
 import com.numberone.common.utils.StringUtils;
+import com.numberone.common.utils.poi.ExcelUtil;
 import com.numberone.system.domain.InCome;
+import com.numberone.system.domain.SysUser;
 import com.numberone.system.service.InComeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +48,16 @@ public class InComeController {
         return getDataTable(list);
     }
 
+
+    @Log(title = "收益导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult export(@RequestParam Map<String,Object> params)
+    {
+        List<InCome> list = inComeService.list(params);
+        ExcelUtil<InCome> util = new ExcelUtil<InCome>(InCome.class);
+        return util.exportExcel(list, "收益列表");
+    }
 
     /**
      * 设置请求分页数据

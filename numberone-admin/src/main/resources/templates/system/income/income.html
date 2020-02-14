@@ -38,9 +38,9 @@
         </div>
 
         <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-            <!--				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:post:export">-->
-            <!--		            <i class="fa fa-download"></i> 导出-->
-            <!--		        </a>-->
+            <a class="btn btn-warning" onclick="$.table.exportExcel()">
+                <i class="fa fa-download"></i> 导出
+            </a>
         </div>
 
         <div class="col-sm-12 select-table table-striped">
@@ -61,7 +61,7 @@
             // createUrl: prefix + "/add",
             // updateUrl: prefix + "/edit/{id}",
             // removeUrl: prefix + "/remove",
-            // exportUrl: prefix + "/export",
+            exportUrl: prefix + "/export",
             // sortName: "id",
             modalName: "收益结算",
             search: false,
