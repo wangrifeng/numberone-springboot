@@ -82,9 +82,22 @@
 					title: '收益人'
 				},
                 {
-                    field: 'contractName',
-                    title: '收益类型',
-                    sortable: true
+                    field: 'level',
+                    title: '合约类型',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                       switch(value){
+                           case 1:
+                               return "屌丝";
+                           case 2:
+                               return "网红";
+                           case 3:
+                               return "明星";
+                           case 4:
+                               return "大咖";
+                       }
+                    }
+
                 },
                 {
                     field: 'contractSalary',

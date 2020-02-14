@@ -75,6 +75,9 @@ public class InCome {
     @TableField(exist = false)
     private String contractName;
 
+    @TableField(exist = false)
+    private Integer level;
+
     public InCome() {
     }
 
