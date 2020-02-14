@@ -46,4 +46,10 @@ public interface InComeService extends IService<InCome> {
      * @param params
      */
     List<InCome> list(Map<String, Object> params);
+
+    /**
+     * 昨日发放签约收益总额
+     * @return
+     */
+    BigDecimal yesterdaySignIncomeCount();
 }

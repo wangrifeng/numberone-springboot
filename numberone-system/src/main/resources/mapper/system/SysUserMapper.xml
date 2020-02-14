@@ -86,7 +86,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			AND (u.dept_id = #{deptId} OR u.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE FIND_IN_SET (#{deptId},ancestors) ))
 		</if>
 		<if test="upUserId != null and upUserId != ''">
-			AND user_id in (select reced_id from sys_user_level where rec_id = #{upUserId} union select #{upUserId})
+			AND u.user_id in (select reced_id from sys_user_level where rec_id = #{upUserId} union select #{upUserId})
 		</if>
 		<!-- 数据范围过滤 -->
 		${params.dataScope}

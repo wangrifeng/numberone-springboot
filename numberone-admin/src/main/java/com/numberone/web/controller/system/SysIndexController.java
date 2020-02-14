@@ -1,6 +1,9 @@
 package com.numberone.web.controller.system;
 
 import java.util.List;
+
+import com.numberone.common.base.AjaxResult;
+import com.numberone.system.service.ISysIndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -10,6 +13,8 @@ import com.numberone.system.domain.SysMenu;
 import com.numberone.system.domain.SysUser;
 import com.numberone.system.service.ISysMenuService;
 import com.numberone.framework.web.base.BaseController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 首页 业务处理
@@ -21,6 +26,9 @@ public class SysIndexController extends BaseController
 {
     @Autowired
     private ISysMenuService menuService;
+
+    @Autowired
+    private ISysIndexService sysIndexService;
 
     // 系统首页
     @GetMapping("/index")
@@ -42,5 +50,13 @@ public class SysIndexController extends BaseController
     {
         mmap.put("version", Global.getVersion());
         return "main";
+    }
+
+
+    @ResponseBody
+    @PostMapping("/mainInfo")
+    public AjaxResult mainInfo()
+    {
+        return AjaxResult.success().put("data",sysIndexService.mainInfo());
     }
 }

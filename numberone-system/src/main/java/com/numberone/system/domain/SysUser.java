@@ -62,12 +62,15 @@ public class SysUser extends BaseEntity
     private String upUserId;
 
     /** 工会人数 **/
+    @Excel(name = "团队人数")
     private Integer memberSize;
 
     /** 合约名称 **/
+    @Excel(name = "合约")
     private String contractName;
 
     /** 团队签约值 **/
+    @Excel(name = "体量")
     private BigDecimal unionSignTotalMoney;
 
     /** 帐号状态（0正常 1停用） */
@@ -89,6 +92,7 @@ public class SysUser extends BaseEntity
     @Excel(name = "部门名称", targetAttr = "deptName", type = Type.EXPORT)
     private SysDept dept;
 
+    @Excel(name = "推荐人")
     private String upName;
 
     private List<SysRole> roles;

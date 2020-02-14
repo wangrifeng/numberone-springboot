@@ -38,14 +38,14 @@
                             <a href="javascript:;" class="x-admin-backlog-body">
                                 <h3>用户数</h3>
                                 <p>
-                                    <cite>66</cite></p>
+                                    <cite id="userCount">0</cite></p>
                             </a>
                         </li>
                         <li class="layui-col-md2 layui-col-xs6">
                             <a href="javascript:;" class="x-admin-backlog-body">
                                 <h3>合约数（经济）</h3>
                                 <p>
-                                    <cite>12</cite></p>
+                                    <cite id="userContractNumber">0</cite></p>
                             </a>
                         </li>
                         <li class="layui-col-md2 layui-col-xs6">
@@ -85,7 +85,7 @@
                 <div class="layui-card-header">今日新增用户
                     <span class="layui-badge layui-bg-cyan layuiadmin-badge">人</span></div>
                 <div class="layui-card-body  ">
-                    <p class="layuiadmin-big-font">33,555</p>
+                    <p class="layuiadmin-big-font" id="todayNewPersonCount">0</p>
                 </div>
             </div>
         </div>
@@ -94,7 +94,7 @@
                 <div class="layui-card-header">昨日合约发放（经济）
                     <span class="layui-badge layui-bg-cyan layuiadmin-badge">MDC</span></div>
                 <div class="layui-card-body ">
-                    <p class="layuiadmin-big-font">33,555</p>
+                    <p class="layuiadmin-big-font" id="yesterdaySignIncomeCount">0</p>
                 </div>
             </div>
         </div>
@@ -116,9 +116,46 @@
                 </div>
             </div>
         </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">每日购买进阶卡数量
+                    <span class="layui-badge layui-bg-cyan layuiadmin-badge">MDC</span></div>
+                <div class="layui-card-body ">
+                    <p class="layuiadmin-big-font">33,555</p>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">进阶卡总量
+                    <span class="layui-badge layui-bg-cyan layuiadmin-badge">MDC</span></div>
+                <div class="layui-card-body ">
+                    <p class="layuiadmin-big-font">33,555</p>
+                </div>
+            </div>
+        </div>
         <style id="welcome_style"></style>
     </div>
 </div>
 </div>
+<script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script>
+    $(function () {
+        $.ajax({
+            type : 'post',
+            url: '/mainInfo',
+            success : function(result) {
+                if (result.code == "0") {
+                    $("#userCount").html(result.data.userCount);
+                    $("#userContractNumber").html(result.data.userContractNumber);
+                    $("#todayNewPersonCount").html(result.data.todayNewPersonCount);
+                    $("#yesterdaySignIncomeCount").html(result.data.yesterdaySignIncomeCount);
+                } else {
+                    $.modal.msgError(result.msg);
+                }
+            }
+        });
+    })
+</script>
 </body>
 </html>

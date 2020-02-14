@@ -128,6 +128,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
     }
 
+    @Override
+    public Integer todayNewPersonCount() {
+        return this.baseMapper.todayNewPersonCount();
+    }
+
     /**
      * 更新推荐人的团队成员总数
      *

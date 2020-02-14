@@ -26,4 +26,10 @@ public interface UserContractService extends IService<UserContract> {
      * @return
      */
     UserContract getUserContractByTypeAndUserId(Integer userId, Integer type);
+
+    /**
+     * 查询签约总数
+     * @return
+     */
+    Integer selectSignCount();
 }

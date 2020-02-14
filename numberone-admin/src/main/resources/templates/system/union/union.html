@@ -65,7 +65,9 @@
         </div>
 
         <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-
+            <a class="btn btn-warning" onclick="$.table.exportExcel()">
+                <i class="fa fa-download"></i> 导出
+            </a>
         </div>
 
         <div class="col-sm-12 select-table table-striped">
@@ -97,6 +99,7 @@
     function queryUserList() {
         var options = {
             url: prefix + "/list",
+            exportUrl: prefix + "/export",
             sortName: "createTime",
             sortOrder: "desc",
             modalName: "用户",

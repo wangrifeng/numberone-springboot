@@ -73,4 +73,13 @@
         select #{userId}
         )
     </select>
+
+    <select id="yesterdaySignIncomeCount" resultType="BigDecimal">
+        select
+        ifnull(sum(salary),0)
+        from
+        mdc_income
+        where type = 1
+        and sel_date like concat(left(#{yesterday},10),'%')
+    </select>
 </mapper>
