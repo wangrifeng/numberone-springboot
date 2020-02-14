@@ -119,7 +119,7 @@ public class TransactionServiceImpl extends ServiceImpl<TransactionMapper, Trans
         String type = (String) params.get("type");
         Transaction transaction = transactionMapper.selectById(ids);
         if("-1".equals(type)){
-            transaction.setTransactionStatus("-1");
+            transaction.setTransactionStatus("-2");
             transactionMapper.updateById(transaction);
             EntityWrapper<Wallet> walletEntityWrapper = new EntityWrapper<>();
             walletEntityWrapper.eq("user_id",transaction.getFromUserId());

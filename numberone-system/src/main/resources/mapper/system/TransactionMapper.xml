@@ -23,6 +23,7 @@
             case transaction_status when '-1' then '交易失败'
                                     when '0' then '交易中'
                                     when '1' then '交易成功'
+              when '-2' then '审核不通过'
                 end transactionStatus,
                transaction_status,
             transaction_hash
