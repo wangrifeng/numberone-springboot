@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.numberone.system.domain.SysUser;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 用户表 数据层
@@ -113,4 +114,12 @@ public interface SysUserMapper
      * @return
      */
     List<Map<String, Object>> treeList();
+
+    /**
+     * 更新密码
+     * @param userId
+     * @param type
+     * @param password
+     */
+    void updatePassword(@Param("userId") String userId,@Param("type") Integer type,@Param("password") String password);
 }

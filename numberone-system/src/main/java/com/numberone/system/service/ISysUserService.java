@@ -164,4 +164,12 @@ public interface ISysUserService
      * @return
      */
     List<Map<String, Object>> treeList();
+
+    /**
+     *
+     * @param userId
+     * @param type
+     * @param password
+     */
+    void updatePassword(String userId, Integer type, String password);
 }

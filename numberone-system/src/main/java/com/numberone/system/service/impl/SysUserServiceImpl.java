@@ -452,4 +452,14 @@ public class SysUserServiceImpl implements ISysUserService
     public List<Map<String, Object>> treeList() {
         return this.userMapper.treeList();
     }
+
+    @Override
+    public void updatePassword(String userId, Integer type, String password) {
+        SysUser sysUser = this.selectUserById(Long.valueOf(userId));
+        if(sysUser == null){
+            throw new BusinessException("用户不存在");
+        }
+        password = Md5Utils.hash(sysUser.getLoginName() + password);
+        this.userMapper.updatePassword(userId,type,password);
+    }
 }
