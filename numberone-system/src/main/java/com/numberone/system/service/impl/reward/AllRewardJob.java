@@ -27,8 +27,6 @@ public class AllRewardJob {
     @Autowired
     private ContractService contractService;
 
-
-    @Scheduled(cron = "0 10 0 * * ?")
     @Transactional
     public void execute() throws BusinessException {
         //找出所有用户ids
