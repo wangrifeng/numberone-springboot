@@ -89,6 +89,8 @@ public class SysUser extends BaseEntity
     @Excel(name = "部门名称", targetAttr = "deptName", type = Type.EXPORT)
     private SysDept dept;
 
+    private String upName;
+
     private List<SysRole> roles;
 
     /** 角色组 */
@@ -331,6 +333,14 @@ public class SysUser extends BaseEntity
 
     public void setContractName(String contractName) {
         this.contractName = contractName;
+    }
+
+    public String getUpName() {
+        return upName;
+    }
+
+    public void setUpName(String upName) {
+        this.upName = upName;
     }
 
     @Override
