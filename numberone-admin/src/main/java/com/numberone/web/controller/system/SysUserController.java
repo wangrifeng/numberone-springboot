@@ -3,16 +3,13 @@ package com.numberone.web.controller.system;
 import java.util.List;
 import java.util.Map;
 
+import com.numberone.common.utils.bean.ResponseResult;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.numberone.common.annotation.Log;
 import com.numberone.common.base.AjaxResult;
@@ -159,6 +156,18 @@ public class SysUserController extends BaseController
         mmap.put("posts", postService.selectPostsByUserId(userId));
         return prefix + "/edit";
     }
+
+    /**
+     * 修改密码
+     */
+    @PostMapping("/updatePassword")
+    @ResponseBody
+    public ResponseResult updatePassword(@RequestParam String userId, @RequestParam Integer type, @RequestParam String password)
+    {
+        this.userService.updatePassword(userId,type,password);
+        return ResponseResult.success();
+    }
+
 
     /**
      * 修改保存用户

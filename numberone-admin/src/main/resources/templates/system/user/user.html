@@ -171,6 +171,7 @@
 		                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.userId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
 		                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.userId + '\')"><i class="fa fa-remove"></i>删除</a> ');
 		                actions.push('<a class="btn btn-info btn-xs ' + resetPwdFlag + '" href="#" onclick="resetPwd(\'' + row.userId + '\')"><i class="fa fa-key"></i>重置</a>');
+						actions.push('<a class="btn btn-info btn-xs" style="margin-left: 3px;" href="#" onclick="updatePassword(\'' + row.userId + '\')"><i class="fa fa-key"></i>修改密码</a>');
 		                return actions.join('');
 		            }
 		        }]
@@ -244,6 +245,60 @@
 			$.modal.confirm("确认要启用用户吗？", function() {
 				$.operate.post(prefix + "/changeStatus", { "userId": userId, "status": 0 });
 		    })
+		}
+
+		function updatePassword(id) {
+			var html ='\t\t\t<div class="" id="updatePwd">\n' +
+					'\t\t\t\t<form class="form-horizontal m" >\n' +
+					'\t\t\t\t\t<div class="form-group">\n' +
+					'\t\t\t\t\t\t<label class="col-sm-3 control-label">密码类型：</label>\n' +
+					'\t\t\t\t\t\t<div class="col-sm-8">\n' +
+					'\t\t\t\t\t\t\t<label class="radio-box"> <input type="radio" name="type" value="0" checked/> 登录密码 </label>\n' +
+					'\t\t\t\t\t\t\t<label class="radio-box"> <input type="radio" name="type" value="1" /> 支付密码 </label>\n' +
+					'\t\t\t\t\t\t</div>\n' +
+					'\t\t\t\t\t</div>\n' +
+					'\t\t\t\t\t<div class="form-group">\n' +
+					'\t\t\t\t\t\t<label class="col-sm-3 control-label">密码：</label>\n' +
+					'\t\t\t\t\t\t<div class="col-sm-8">\n' +
+					'\t\t\t\t\t\t\t<input class="form-control" type="password" name="password" id="password">\n' +
+					'\t\t\t\t\t\t</div>\n' +
+					'\t\t\t\t\t</div>\n' +
+					'\t\t\t\t</form>\n' +
+					'\t\t\t</div>';
+			layer.open({
+				type: 1,
+				area: ['400px', '230px'],
+				fix: false,
+				//不固定
+				maxmin: true,
+				shade: 0.3,
+				title: '修改密码',
+				content: html,
+				btn: ['确认', '取消'],
+				// 弹层外区域关闭
+				shadeClose: true,
+				btn1: function(index, layero){
+					var type = $("input[name='type']:checked").val();
+					var password = $("#password").val();
+					var formData = {
+						type: type,
+						userId : id,
+						password: password
+					}
+					$.ajax({
+						url: '/system/user/updatePassword?userId=' +id + "&type="+type +"&password="+password,
+						cache: false,
+						contentType: "application/x-www-form-urlencoded",
+						processData: false,
+						type: 'POST',
+						success: function (result) {
+							$.modal.closeAll();
+							$.modal.alertSuccess(result.msg);
+						}
+					});
+				}
+			});
+
 		}
 	</script>
 </body>
