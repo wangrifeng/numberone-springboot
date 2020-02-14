@@ -63,4 +63,8 @@ public class Md5Utils
             return s;
         }
     }
+
+    public static void main(String[] args) {
+        System.out.println(Md5Utils.hash("admin123456"));
+    }
 }

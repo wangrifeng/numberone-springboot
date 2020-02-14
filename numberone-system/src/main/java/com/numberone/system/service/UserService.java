@@ -2,6 +2,7 @@ package com.numberone.system.service;
 
 
 import com.baomidou.mybatisplus.service.IService;
+import com.numberone.common.base.AjaxResult;
 import com.numberone.system.domain.User;
 
 import java.util.List;
@@ -21,4 +22,9 @@ public interface UserService extends IService<User> {
      */
     List<User> getDirectUserLevel(String ids);
 
+    /**
+     * 新增
+     * @return
+     */
+    AjaxResult add(String userName, String loginName, String password, String walletPassword, Integer sendCode, Integer registerType);
 }

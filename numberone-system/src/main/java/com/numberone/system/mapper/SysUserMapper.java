@@ -30,6 +30,14 @@ public interface SysUserMapper
     public SysUser selectUserByLoginName(String userName);
 
     /**
+     * 通过用户名查询用户
+     *
+     * @param userName 用户名
+     * @return 用户对象信息
+     */
+    public SysUser selectUserByUserName(String userName);
+
+    /**
      * 通过手机号码查询用户
      * 
      * @param phoneNumber 手机号码
@@ -122,4 +130,11 @@ public interface SysUserMapper
      * @param password
      */
     void updatePassword(@Param("userId") String userId,@Param("type") Integer type,@Param("password") String password);
+
+    /**
+     * 根据推荐吗查询用户信息
+     * @param sendCode
+     * @return
+     */
+    SysUser selectUserBySendCode(String sendCode);
 }

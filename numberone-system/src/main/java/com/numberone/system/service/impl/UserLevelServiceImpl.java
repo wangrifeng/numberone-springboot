@@ -44,4 +44,9 @@ public class UserLevelServiceImpl extends ServiceImpl<UserLevelMapper, UserLevel
     public List<Integer> selectRecIdsByRecedId(Integer userId) {
         return this.baseMapper.selectRecIdsByRecedId(userId);
     }
+
+    @Override
+    public Integer selectMemberSizeByUserId(String userId) {
+        return this.baseMapper.selectMemberSizeByUserId(userId);
+    }
 }

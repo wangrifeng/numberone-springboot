@@ -3,6 +3,7 @@ package com.numberone.system.service;
 import java.util.List;
 import java.util.Map;
 
+import com.numberone.common.base.AjaxResult;
 import com.numberone.system.domain.SysUser;
 
 /**
@@ -172,4 +173,15 @@ public interface ISysUserService
      * @param password
      */
     void updatePassword(String userId, Integer type, String password);
+
+    /**
+     * 分享注册
+     * @param userName
+     * @param loginName
+     * @param password
+     * @param walletPassword
+     * @param sendCode
+     * @param registerType
+     */
+    AjaxResult registerAdd(String userName, String loginName, String password, String walletPassword, Integer sendCode, Integer registerType);
 }

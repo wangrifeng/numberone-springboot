@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.numberone.common.utils.bean.ResponseResult;
+import com.numberone.system.service.VerificationCodeService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,6 +48,9 @@ public class SysUserController extends BaseController
 
     @Autowired
     private SysPasswordService passwordService;
+
+    @Autowired
+    private VerificationCodeService verificationCodeService;
 
     @RequiresPermissions("system:user:view")
     @GetMapping()
@@ -143,6 +147,32 @@ public class SysUserController extends BaseController
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
         user.setCreateBy(ShiroUtils.getLoginName());
         return toAjax(userService.insertUser(user));
+    }
+
+
+    /**
+     * 用户分享注册
+     */
+    @Log(title = "用户管理", businessType = BusinessType.INSERT)
+    @PostMapping("/registerAdd")
+    @Transactional(rollbackFor = Exception.class)
+    @ResponseBody
+    public AjaxResult registerAdd(
+            @RequestParam String userName,
+            @RequestParam String loginName,
+            @RequestParam String password,
+            @RequestParam String walletPassword,
+            @RequestParam Integer sendCode,
+            @RequestParam String verCode,
+            @RequestParam String verId,
+            @RequestParam Integer registerType
+            )
+    {
+        boolean b = verificationCodeService.validateVerCode(verCode, verId);
+        if(!b){
+            return AjaxResult.error("验证码校验错误");
+        }
+        return this.userService.registerAdd(userName,loginName,password,walletPassword,sendCode,registerType);
     }
 
     /**

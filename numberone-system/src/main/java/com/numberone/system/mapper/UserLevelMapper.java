@@ -40,4 +40,11 @@ public interface UserLevelMapper extends BaseMapper<UserLevel> {
      * @return
      */
     List<Integer> selectRecIdsByRecedId(Integer userId);
+
+    /**
+     * 获取用户的团队数量
+     * @param userId
+     * @return
+     */
+    Integer selectMemberSizeByUserId(String userId);
 }

@@ -65,7 +65,24 @@ spring:
   devtools:
     restart:
       # 热部署开关
-      enabled: true
+      enabled: false
+  mail:
+    host: smtp.126.com
+    username: MDC_COIN_SUPPORT@126.com
+    password: mdc202002
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+            fallback:  false
+          starttls:
+            enable: true
+            required: true
+      port: 465
 
 # MyBatis
 mybatis:

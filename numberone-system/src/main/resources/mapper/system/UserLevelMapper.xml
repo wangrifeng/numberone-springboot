@@ -42,4 +42,14 @@
         reced_id = #{user_id}
         order by level asc
     </select>
+
+
+    <select id="selectMemberSizeByUserId" resultType="Integer">
+        select
+        count(1) + 1
+        from
+        sys_user_level
+        where
+        rec_id = #{userId}
+    </select>
 </mapper>
