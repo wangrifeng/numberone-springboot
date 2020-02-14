@@ -43,6 +43,7 @@ public interface InComeService extends IService<InCome> {
     /**
      * 收益列表
      * @return
+     * @param params
      */
-    List<InCome> list();
+    List<InCome> list(Map<String, Object> params);
 }

@@ -1,6 +1,5 @@
 package com.numberone.system.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.numberone.system.domain.InCome;
 import com.numberone.system.mapper.InComeMapper;
@@ -34,7 +33,7 @@ public class InComeServiceImpl extends ServiceImpl<InComeMapper, InCome> impleme
     }
 
     @Override
-    public List<InCome> list() {
-        return this.baseMapper.list();
+    public List<InCome> list(Map<String, Object> params) {
+        return this.baseMapper.list(params);
     }
 }

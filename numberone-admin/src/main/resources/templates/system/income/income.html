@@ -12,7 +12,19 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            日期：<input type="text" name="selDate"/>
+                            日期：<input type="text" class="time-input"  name="selDate" style="display: inline-block"/>
+                        </li>
+                        <li>
+                            收益人：<input type="text" name="userName"/>
+                        </li>
+                        <li>
+                            收益类型：<select name="level" >
+                            <option value="">所有</option>
+                            <option  th:text="屌丝" th:value="1"></option>
+                            <option  th:text="网红" th:value="2"></option>
+                            <option  th:text="明星" th:value="3"></option>
+                            <option  th:text="大咖" th:value="4"></option>
+                        </select>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
@@ -69,6 +81,11 @@
 					field: 'userName',
 					title: '收益人'
 				},
+                {
+                    field: 'contractName',
+                    title: '收益类型',
+                    sortable: true
+                },
                 {
                     field: 'contractSalary',
                     title: '静态收益',
