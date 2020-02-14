@@ -2,6 +2,7 @@ package com.numberone.web.controller.system;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.numberone.common.base.AjaxResult;
 import com.numberone.common.page.PageDomain;
 import com.numberone.common.page.TableDataInfo;
 import com.numberone.common.page.TableSupport;
@@ -43,6 +44,24 @@ public class WalletController {
     public String walletInfo(@RequestParam Map<String,Object> params,ModelMap mmap) {
         mmap.put("wallet",params);
         return prefix+"/walletInfo";
+    }
+
+    @GetMapping("/handlerBalance")
+    @ApiOperation("/人工改动余额")
+    public String handlerBalance(@RequestParam Map<String,Object> params,ModelMap mmap) {
+        mmap.put("wallet",params);
+        return prefix+"/handlerBalance";
+    }
+
+    @PostMapping("/balanceChange")
+    @ResponseBody
+    @ApiOperation("/修改余额")
+    public AjaxResult balanceChange(@RequestParam Map<String,Object> params) {
+        try {
+            return walletService.changeBalance(params);
+        }catch (Exception e){
+            return AjaxResult.error(e.getMessage());
+        }
     }
 
     @PostMapping("/list")

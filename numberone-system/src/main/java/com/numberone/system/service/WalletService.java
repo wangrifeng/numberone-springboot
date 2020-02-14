@@ -1,6 +1,7 @@
 package com.numberone.system.service;
 
 import com.baomidou.mybatisplus.service.IService;
+import com.numberone.common.base.AjaxResult;
 import com.numberone.system.domain.Wallet;
 
 import java.util.List;
@@ -17,5 +18,7 @@ import java.util.Map;
 public interface WalletService extends IService<Wallet> {
 
     List<Map<String,Object>> getWallet(Map<String,Object> params);
+
+    AjaxResult changeBalance(Map<String,Object> params);
 
 }

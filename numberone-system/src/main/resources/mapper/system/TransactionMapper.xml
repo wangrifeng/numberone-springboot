@@ -32,6 +32,9 @@
         <if test='transactionType!=null and transactionType!=""'>
             and transaction_type=#{transactionType}
         </if>
+        <if test='transactionStatus!=null and transactionStatus!=""'>
+            and transaction_status=#{transactionStatus}
+        </if>
         <if test='startTime!=null and startTime!=""'>
             <![CDATA[
 					and create_time >= #{startTime}

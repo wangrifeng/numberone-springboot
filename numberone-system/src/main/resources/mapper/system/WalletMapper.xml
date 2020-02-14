@@ -3,7 +3,30 @@
 <mapper namespace="com.numberone.system.mapper.WalletMapper">
 
     <select id="getWallets" resultType="java.util.Map">
-        select w.wallet_id,  w.address,   w.ustd_blance, w.mdc_blance,  w.create_time ,u.user_name from mdc_wallet w,sys_user u where w.user_id = u.user_id order by w.create_time desc
+        select w.wallet_id,  w.address,   w.ustd_blance, w.mdc_blance,  w.create_time ,u.user_name from mdc_wallet w,sys_user u
+        where w.user_id = u.user_id
+        <if test='userName!=null and userName!=""'>
+            <bind name="_userName" value="'%'+userName+'%'"/>
+            and u.user_name like #{_userName}
+        </if>
+        <if test='address!=null and address!=""'>
+            <bind name="_address" value="'%'+address+'%'"/>
+            and w.address like #{_address}
+        </if>
+        <if test='startTime!=null and startTime!=""'>
+            <![CDATA[
+					and w.create_time >= #{startTime}
+			]]>
+        </if>
+        <if test='endTime!=null and endTime!=""'>
+            <![CDATA[
+					and w.create_time <= #{endTime}
+			]]>
+        </if>
+        <if test='walletAddress!=null and walletAddress!=""'>
+            and (from_wallet_address=#{walletAddress} or to_wallet_address=#{walletAddress})
+        </if>
+        order by w.create_time desc,w.ustd_blance desc,w.mdc_blance desc
     </select>
 
 </mapper>
