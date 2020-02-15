@@ -233,8 +233,9 @@
             time--;
             if(time < 0){
                 clearInterval(interval);
-                $("#code").show();
                 $("#timer").hide();
+                $("#code").show();
+                $("#timerText").html(60);
             }
             $("#timerText").html(time);
         },1000);//启动计时器，调用overs函数，
