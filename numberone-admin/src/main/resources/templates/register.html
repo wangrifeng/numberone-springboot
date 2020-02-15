@@ -99,8 +99,8 @@
             </div>
             <div class="line">
                 <input name="password1" type="password" class="registerInput" placeholder="请输入登录密码">
-                <img src="/img/open.png" style="width: 5%; margin-top:-30px;margin-left: 270px" onclick="showPass()">
-                <img src="/img/close.png" style="width: 5%; margin-top:-27px;margin-left: 220px" onclick="hidePass()">
+                <img id="showImg" src="/img/open.png" style="width: 5%; margin-top:-30px;margin-left: 270px" onclick="showPass()">
+                <img id="hideImg" src="/img/close.png" style="width: 5%; margin-top:-27px;margin-left: 270px;display: none" onclick="hidePass()">
             </div>
             <div class="line ">
                 <input name="password2" type="password" class="registerInput" placeholder="请再次输入登录密码">
@@ -109,7 +109,7 @@
                 <input name="payPassWord" type="password" class="registerInput" placeholder="请输入交易密码（6位数字）">
             </div>
             <div class="line ">
-                <input name="shareCode" type="text" readonly="readonly" class="registerInput" placeholder="推荐码"
+                <input name="shareCode" type="text"  class="registerInput" placeholder="推荐码"
                        th:value="${sendCode}">
             </div>
             <div class="line">
@@ -189,10 +189,14 @@
 
     function showPass() {
         $("input[name='password1']").attr("type","text");
+        $("#showImg").hide();
+        $("#hideImg").show();
     }
 
     function hidePass() {
         $("input[name='password1']").attr("type","password");
+        $("#hideImg").hide();
+        $("#showImg").show();
     }
 
     function getVerCode() {
