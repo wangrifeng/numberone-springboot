@@ -74,6 +74,10 @@
         font-size: 16px;
     }
 
+    input{
+        padding-top:0 ;
+        padding-bottom: 0;
+    }
 
 </style>
 <body align="center" style="min-height:100%">
@@ -89,13 +93,14 @@
                 <div class="i-name ico"></div>
             </div>
             <div class="line">
-                <input name="code" type="text" class="registerInput" placeholder="请输入验证码">
-                <img src="/img/code.png" style="width: 25%; margin-top:-37px;margin-left: 200px" onclick="getVerCode()">
+                <input id="verCode"  name="code" type="text" class="registerInput" placeholder="请输入验证码">
+                <img id="code" src="/img/code.png" style="position:absolute;right:40px;width: 25%;" onclick="getVerCode()"/>
+                <div style="position:absolute;right:40px;top:25px;width: 25%;font-size: 23px;display: none;border-radius: 5px ;background: lightgray;color: white" id="timer" ><i id="timerText">60</i> s</div>
             </div>
             <div class="line">
                 <input name="password1" type="password" class="registerInput" placeholder="请输入登录密码">
-                <img src="/img/open.png" style="width: 5%; margin-top:-30px;margin-left: 270px">
-                <img src="/img/close.png" style="width: 5%; margin-top:-27px;margin-left: 220px">
+                <img src="/img/open.png" style="width: 5%; margin-top:-30px;margin-left: 270px" onclick="showPass()">
+                <img src="/img/close.png" style="width: 5%; margin-top:-27px;margin-left: 220px" onclick="hidePass()">
             </div>
             <div class="line ">
                 <input name="password2" type="password" class="registerInput" placeholder="请再次输入登录密码">
@@ -118,6 +123,10 @@
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script>
     var verId;
+    $(function () {
+        $("#code").css("top",($("#verCode").height()-$("#code").height())/2+10 + "px");
+        $("#timer").css("top",($("#verCode").height()-$("#code").height())/2+10 + "px");
+    })
 
     function submit() {
         var userName = $("input[name='userName']").val();
@@ -125,8 +134,28 @@
         var password = $("input[name='password1']").val();
         var password2 = $("input[name='password2']").val();
         var payPassWord = $("input[name='payPassWord']").val();
-        if (!userName || !code || !password || !password2 || !payPassWord) {
-            alert("请填入所有字段");
+        if (!userName ) {
+            alert("请输入手机号/邮箱");
+            return;
+        }
+
+        if (!code ) {
+            alert("请输入验证码");
+            return;
+        }
+
+        if (!password ) {
+            alert("请输入登录密码");
+            return;
+        }
+
+        if (!password2 ) {
+            alert("请再次输入登录密码");
+            return;
+        }
+
+        if (!payPassWord ) {
+            alert("请输入交易密码（6位数字）");
             return;
         }
 
@@ -137,10 +166,8 @@
             registerType = 0;
         }
         if (password !== password2) {
-            $("#errMsg").html("两次输入的登录密码不相同");
+            alert("两次输入的登录密码不相同");
             return;
-        } else {
-            $("#errMsg").html("");
         }
         $.ajax({
             url: "/system/user/registerAdd?userName=" + userName + "&loginName=" + userName + "&password=" + password + "&walletPassword=" + payPassWord
@@ -153,17 +180,25 @@
                 if (result.code + "" === "0") {
                     alert("注册成功");
                 } else {
-                    $("#errMsg").html(result.msg);
+                   alert(result.msg);
                 }
             }
         })
         ;
     }
 
+    function showPass() {
+        $("input[name='password1']").attr("type","text");
+    }
+
+    function hidePass() {
+        $("input[name='password1']").attr("type","password");
+    }
+
     function getVerCode() {
         var userName = $("input[name='userName']").val();
         if (!userName) {
-            $("#errMsg").html("请输入手机号/邮箱");
+            alert("请输入手机号/邮箱");
             return;
         }
         var url = "";
@@ -181,14 +216,27 @@
             type: 'POST',
             success: function (result) {
                 if (result.code + "" !== "0") {
-                    $("#errMsg").html(result.msg);
+                    alert(result.msg);
                 } else {
-                    $("#errMsg").html("");
                     verId = result.data.verId;
-                    alert("验证码已发送，请注意查收")
+                    // alert("验证码已发送，请注意查收")
                 }
             }
         });
+
+        //显示计时器
+        $("#code").hide();
+        $("#timer").show();
+        var time = 60;
+        var interval = setInterval(function () {
+            time--;
+            if(time < 0){
+                clearInterval(interval);
+                $("#code").show();
+                $("#timer").hide();
+            }
+            $("#timerText").html(time);
+        },1000);//启动计时器，调用overs函数，
     }
 
 </script>
