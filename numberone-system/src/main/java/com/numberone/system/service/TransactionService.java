@@ -44,5 +44,5 @@ public interface TransactionService extends IService<Transaction> {
 
     AjaxResult personHandleCashOut(Map<String,Object> params) throws InterruptedException, ExecutionException, CipherException, IOException;
 
-    Map<String,Object> investCashOutSize();
+    Map<String,Object> investCashOutSize(Map<String,Object> params);
 }

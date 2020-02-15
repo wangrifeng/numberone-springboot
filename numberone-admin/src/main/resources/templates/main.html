@@ -103,7 +103,7 @@
                 <div class="layui-card-header">今日充值数
                     <span class="layui-badge layui-bg-cyan layuiadmin-badge">USTD</span></div>
                 <div class="layui-card-body ">
-                    <p class="layuiadmin-big-font">33,555</p>
+                    <p class="layuiadmin-big-font" id="todayInvest">33,555</p>
                 </div>
             </div>
         </div>
@@ -112,7 +112,7 @@
                 <div class="layui-card-header">新日提现数
                     <span class="layui-badge layui-bg-cyan layuiadmin-badge">USTD</span></div>
                 <div class="layui-card-body ">
-                    <p class="layuiadmin-big-font">33,555</p>
+                    <p class="layuiadmin-big-font" id="todayCashOut">33,555</p>
                 </div>
             </div>
         </div>
@@ -154,6 +154,8 @@
                     $("#mdcBalance").html(result.data.mdcBalance);
                     $("#invest").html(result.data.invest);
                     $("#cashOut").html(result.data.cashOut);
+                    $("#todayInvest").html(result.data.todayInvest);
+                    $("#todayCashOut").html(result.data.todayCashOut);
                 } else {
                     $.modal.msgError(result.msg);
                 }
