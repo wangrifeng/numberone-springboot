@@ -293,14 +293,14 @@
                c.name contractName,
                u.contract_id,
                case contract_type when '-1' then '解约'
-                when '1' then '购买'
-                when '2' then '进阶'
+                when '1' then '签约'
+                when '2' then '升级'
                end contractType,
         case t.transaction_status when '-1' then '交易失败'
         when '0' then '交易中'
         when '1' then '交易成功'
         when '-2' then '审核不通过'
-        end transactionStatus,
+        end transactionStatus
         from mdc_transaction t,(select max(create_time),user_id,contract_id from mdc_user_contract where del_flag=0 group by user_id,contract_id) u,sys_contract c where transaction_type = '4' and t.from_user_id = u.user_id and u.contract_id = c.id
         <if test='contractType!=null and contractType!=""'>
             and t.contract_type = #{contractType}
