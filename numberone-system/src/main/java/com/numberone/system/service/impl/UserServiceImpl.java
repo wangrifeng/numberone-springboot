@@ -3,6 +3,7 @@ package com.numberone.system.service.impl;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.numberone.common.base.AjaxResult;
+import com.numberone.common.exception.BusinessException;
 import com.numberone.common.utils.Md5Utils;
 import com.numberone.system.domain.User;
 import com.numberone.system.mapper.UserMapper;
@@ -43,9 +44,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return this.baseMapper.getDirectUserLevel(ids);
     }
 
+    private void validatePayPassword(String payPassword) throws BusinessException {
+        if(payPassword == null || payPassword.length() != 6){
+            throw new BusinessException("支付密码的长度只能为6");
+        }
+    }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public AjaxResult add(String userName, String loginName, String password, String walletPassword, Integer sendCode, Integer registerType) {
+        try{
+            validatePayPassword(walletPassword);
+        }catch (BusinessException e){
+            return AjaxResult.error(e.getMessage());
+        }
+
         //count>0说明username已存在，isRepeat>0说明姓名已存在，重复需要加标识
         Integer count = userMapper.user(loginName);
         Integer isRepeat = userMapper.isRepeat(userName);
