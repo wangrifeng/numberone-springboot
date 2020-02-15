@@ -28,6 +28,7 @@ public class AllRewardJob {
     private ContractService contractService;
 
     @Transactional
+    @Scheduled(cron = "0 10 0 * * ?")
     public void execute() throws BusinessException {
         //找出所有用户ids
         List<Integer> userIds = userService.findAllUserIds();
