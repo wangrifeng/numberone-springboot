@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.numberone.common.base.AjaxResult;
 import com.numberone.system.domain.Transaction;
 import com.numberone.system.domain.Wallet;
+import com.numberone.system.domain.WalletVo;
 import com.numberone.system.mapper.TransactionMapper;
 import com.numberone.system.mapper.WalletMapper;
 import com.numberone.system.service.WalletService;
@@ -50,7 +51,7 @@ public class WalletServiceImpl extends ServiceImpl<WalletMapper, Wallet> impleme
     }
 
     @Override
-    public List<Map<String, Object>> getWallet(Map<String, Object> params) {
+    public List<WalletVo> getWallet(Map<String, Object> params) {
         return walletMapper.getWallets(params);
     }
 

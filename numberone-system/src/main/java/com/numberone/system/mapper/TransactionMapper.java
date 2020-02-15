@@ -1,7 +1,10 @@
 package com.numberone.system.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.numberone.system.domain.ContractVo;
+import com.numberone.system.domain.InvestCashOutVo;
 import com.numberone.system.domain.Transaction;
+import com.numberone.system.domain.TransactionVo;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,7 +25,11 @@ public interface TransactionMapper extends BaseMapper<Transaction> {
 
     List<Map<String,Object>> transactionAmountSum(Map<String,Object> params);
 
-    List<Map<String,Object>> getContract(Map<String,Object> params);
+    List<ContractVo> getContract(Map<String,Object> params);
+
+    List<TransactionVo> exportTransaction(Map<String,Object> params);
+
+    List<InvestCashOutVo> exportInvestCashOut(Map<String,Object> params);
 
 
 }

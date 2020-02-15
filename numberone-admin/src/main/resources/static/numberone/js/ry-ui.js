@@ -140,10 +140,23 @@
     		    $(id).bootstrapTable('refresh', params);
     		},
     		// 导出数据
-    		exportExcel: function(formId) {
+    		exportExcel: function(formId,exportUrl,tableId) {
     			var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+				var url="";
+				if(typeof(exportUrl) == "undefined"){
+					url=$.table._option.exportUrl;
+				}else{
+					url=exportUrl;
+				}
+				if(typeof(tableId) != "undefined"){
+					var post = $("#"+tableId).bootstrapTable('getOptions').url;
+					var index=post.lastIndexOf("?");
+					var data = post.substring(index+1,post.length);
+					url = url+"?"+data;
+				}
+				//var params = $(id).bootstrapTable('getOptions');
     			$.modal.loading("正在导出数据，请稍后...");
-    			$.post($.table._option.exportUrl, $("#" + currentId).serializeArray(), function(result) {
+    			$.post(url, $("#" + currentId).serializeArray(), function(result) {
     				if (result.code == web_status.SUCCESS) {
     			        window.location.href = ctx + "common/download?fileName=" + result.msg + "&delete=" + true;
     				} else {

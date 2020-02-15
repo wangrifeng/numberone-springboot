@@ -88,6 +88,185 @@
         order by create_time desc
     </select>
 
+    <select id="exportTransaction" resultType="com.numberone.system.domain.TransactionVo">
+        select
+        transaction_id,
+        from_user_id,
+        (Select user_name from sys_user where from_user_id = user_id) fromUserName,
+        from_wallet_address,
+        to_user_id,
+        (Select user_name from sys_user where to_user_id = user_id) toUserName,
+        to_wallet_address,
+        create_time,
+        remark,
+        from_amount,
+        from_wallet_type,
+               case from_wallet_type when  '0' then 'USDT'
+                 when '1' then 'MDC'
+                   end walletType,
+        to_amount,
+        to_wallet_type,
+        transaction_type,
+        fee_amount,
+        case transaction_status when '-1' then '交易失败'
+        when '0' then '交易中'
+        when '1' then '交易成功'
+        when '-2' then '审核不通过'
+        end transactionStatus,
+        transaction_status,
+        transaction_hash
+        from mdc_transaction
+        where 0 = 0
+        <if test='fromUserName!=null and fromUserName!=""'>
+            <bind name="_fromUserName" value="'%'+fromUserName+'%'"/>
+            and from_user_id in (select user_id from sys_user where user_name like #{_fromUserName})
+        </if>
+        <if test='transactionType!=null and transactionType!=""'>
+            and transaction_type=#{transactionType}
+        </if>
+        <if test='investCashOut!=null and investCashOut!=""'>
+            and transaction_type in ('0','1')
+        </if>
+        <if test='transactionStatus!=null and transactionStatus!=""'>
+            and transaction_status=#{transactionStatus}
+        </if>
+        <if test='startTime!=null and startTime!=""'>
+            <![CDATA[
+					and create_time >= #{startTime}
+			]]>
+        </if>
+        <if test='endTime!=null and endTime!=""'>
+            <![CDATA[
+					and create_time <= #{endTime}
+			]]>
+        </if>
+        <if test='toWalletAddress!=null and toWalletAddress!=""'>
+            <bind name="_toWalletAddress" value="'%'+toWalletAddress+'%'"/>
+            and to_wallet_address like #{_toWalletAddress}
+        </if>
+        <if test='walletAddress!=null and walletAddress!=""'>
+            and (from_wallet_address=#{walletAddress} or to_wallet_address=#{walletAddress})
+        </if>
+        <if test='invest_address!=null and invest_address!=""'>
+            <bind name="_investAddress" value="'%'+invest_address+'%'"/>
+            and to_wallet_address like #{_investAddress}
+        </if>
+        <if test='invest_wallet_type!=null and invest_wallet_type!=""'>
+            and to_wallet_type = #{invest_wallet_type}
+        </if>
+        <if test="investUserName !=null and investUserName !=''">
+            <bind name="_investUserName" value="'%'+investUserName+'%'"/>
+            and to_user_id in  (Select user_id from sys_user where user_name like #{_investUserName})
+        </if>
+
+        <if test='cashOut_address!=null and cashOut_address!=""'>
+            <bind name="_cashOutAddress" value="'%'+cashOut_address+'%'"/>
+            and from_wallet_address like #{_cashOutAddress}
+        </if>
+        <if test='cashOut_wallet_type!=null and cashOut_wallet_type!=""'>
+            and from_wallet_type = #{cashOut_wallet_type}
+        </if>
+        <if test='toWalletType!=null and toWalletType!=""'>
+            and to_wallet_type = #{toWalletType}
+        </if>
+        <if test="cashOutUserName !=null and cashOutUserName !=''">
+            <bind name="_cashOutUserName" value="'%'+cashOutUserName+'%'"/>
+            and from_user_id in  (Select user_id from sys_user where user_name like #{_cashOutUserName})
+        </if>
+        order by create_time desc
+    </select>
+
+    <select id="exportInvestCashOut" resultType="com.numberone.system.domain.InvestCashOutVo">
+        select
+        transaction_id,
+        from_user_id,
+        (Select user_name from sys_user where from_user_id = user_id) fromUserName,
+        from_wallet_address,
+        to_user_id,
+        (Select user_name from sys_user where to_user_id = user_id) toUserName,
+        to_wallet_address,
+        create_time,
+        remark,
+        from_amount,
+        from_wallet_type,
+        case to_wallet_type when  '0' then 'USDT'
+        when '1' then 'MDC'
+        end walletType,
+        to_amount,
+        to_wallet_type,
+        transaction_type,
+               case transaction_type when '0' then '充值'
+                 when '1' then '提现'
+                   end transactionType,
+        fee_amount,
+        case transaction_status when '-1' then '交易失败'
+        when '0' then '交易中'
+        when '1' then '交易成功'
+        when '-2' then '审核不通过'
+        end transactionStatus,
+        transaction_status,
+        transaction_hash
+        from mdc_transaction
+        where 0 = 0
+        <if test='fromUserName!=null and fromUserName!=""'>
+            <bind name="_fromUserName" value="'%'+fromUserName+'%'"/>
+            and from_user_id in (select user_id from sys_user where user_name like #{_fromUserName})
+        </if>
+        <if test='transactionType!=null and transactionType!=""'>
+            and transaction_type=#{transactionType}
+        </if>
+        <if test='investCashOut!=null and investCashOut!=""'>
+            and transaction_type in ('0','1')
+        </if>
+        <if test='transactionStatus!=null and transactionStatus!=""'>
+            and transaction_status=#{transactionStatus}
+        </if>
+        <if test='startTime!=null and startTime!=""'>
+            <![CDATA[
+					and create_time >= #{startTime}
+			]]>
+        </if>
+        <if test='endTime!=null and endTime!=""'>
+            <![CDATA[
+					and create_time <= #{endTime}
+			]]>
+        </if>
+        <if test='toWalletAddress!=null and toWalletAddress!=""'>
+            <bind name="_toWalletAddress" value="'%'+toWalletAddress+'%'"/>
+            and to_wallet_address like #{_toWalletAddress}
+        </if>
+        <if test='walletAddress!=null and walletAddress!=""'>
+            and (from_wallet_address=#{walletAddress} or to_wallet_address=#{walletAddress})
+        </if>
+        <if test='invest_address!=null and invest_address!=""'>
+            <bind name="_investAddress" value="'%'+invest_address+'%'"/>
+            and to_wallet_address like #{_investAddress}
+        </if>
+        <if test='invest_wallet_type!=null and invest_wallet_type!=""'>
+            and to_wallet_type = #{invest_wallet_type}
+        </if>
+        <if test="investUserName !=null and investUserName !=''">
+            <bind name="_investUserName" value="'%'+investUserName+'%'"/>
+            and to_user_id in  (Select user_id from sys_user where user_name like #{_investUserName})
+        </if>
+
+        <if test='cashOut_address!=null and cashOut_address!=""'>
+            <bind name="_cashOutAddress" value="'%'+cashOut_address+'%'"/>
+            and from_wallet_address like #{_cashOutAddress}
+        </if>
+        <if test='cashOut_wallet_type!=null and cashOut_wallet_type!=""'>
+            and from_wallet_type = #{cashOut_wallet_type}
+        </if>
+        <if test='toWalletType!=null and toWalletType!=""'>
+            and to_wallet_type = #{toWalletType}
+        </if>
+        <if test="cashOutUserName !=null and cashOutUserName !=''">
+            <bind name="_cashOutUserName" value="'%'+cashOutUserName+'%'"/>
+            and from_user_id in  (Select user_id from sys_user where user_name like #{_cashOutUserName})
+        </if>
+        order by create_time desc
+    </select>
+
     <select id="transactionAmountSum" resultType="java.util.Map">
         select
 
@@ -104,13 +283,22 @@
 
     </select>
 
-    <select id="getContract" resultType="java.util.Map">
+    <select id="getContract" resultType="com.numberone.system.domain.ContractVo">
         select
             t.transaction_id, t.from_user_id, t.from_wallet_address, t.to_user_id, t.to_wallet_address, t.create_time, t.remark, t.from_amount, t.from_wallet_type, t.to_amount, t.to_wallet_type, t.transaction_type, t.fee_amount, t.transaction_status, t.transaction_hash, t.contract_type,
-            (SELECT user_name from sys_user where u.user_id = u.user_id) fromUserName,
+            (SELECT user_name from sys_user where user_id = u.user_id) fromUserName,
                c.name contractName,
-               u.contract_id
-        from mdc_transaction t,(select max(create_time),user_id,contract_id from mdc_user_contract where del_flag=0 group by user_id) u,sys_contract c where transaction_type = '4' and t.from_user_id = u.user_id and u.contract_id = c.id
+               u.contract_id,
+               case contract_type when '-1' then '解约'
+                when '1' then '购买'
+                when '2' then '进阶'
+               end contractType,
+        case t.transaction_status when '-1' then '交易失败'
+        when '0' then '交易中'
+        when '1' then '交易成功'
+        when '-2' then '审核不通过'
+        end transactionStatus,
+        from mdc_transaction t,(select max(create_time),user_id,contract_id from mdc_user_contract where del_flag=0 group by user_id,contract_id) u,sys_contract c where transaction_type = '4' and t.from_user_id = u.user_id and u.contract_id = c.id
         <if test='contractType!=null and contractType!=""'>
             and t.contract_type = #{contractType}
         </if>

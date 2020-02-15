@@ -37,6 +37,9 @@
                                             class="fa fa-search"></i>&nbsp;搜索</a>
                                     <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('trans-form')"><i
                                             class="fa fa-refresh"></i>&nbsp;重置</a>
+                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.table.exportExcel('trans-form','exportTransaction','trans-table')">
+                                        <i class="fa fa-download"></i>&nbsp;导出
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -98,6 +101,9 @@
                                             class="fa fa-search"></i>&nbsp;搜索</a>
                                     <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('investCashOut-form')"><i
                                             class="fa fa-refresh"></i>&nbsp;重置</a>
+                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.table.exportExcel('investCashOut-form','exportInvestCashOut','investCashOut-table')">
+                                        <i class="fa fa-download"></i>&nbsp;导出
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -144,6 +150,9 @@
                                             class="fa fa-search"></i>&nbsp;搜索</a>
                                     <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('contract-form')"><i
                                             class="fa fa-refresh"></i>&nbsp;重置</a>
+                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.table.exportExcel('contract-form','exportContract','contract-table')">
+                                        <i class="fa fa-download"></i>&nbsp;导出
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -174,7 +183,7 @@
             // createUrl: prefix + "/add",
             // updateUrl: prefix + "/edit/{id}",
             // removeUrl: prefix + "/remove",
-            // exportUrl: prefix + "/export",
+            exportUrl: prefix + "/exportTransaction?walletAddress="+walletAddress+"&transactionType=2",
             // sortName: "id",
             modalName: "转账信息",
             search: false,
@@ -235,7 +244,7 @@
             // createUrl: prefix + "/add",
             // updateUrl: prefix + "/edit/{id}",
             // removeUrl: prefix + "/remove",
-            // exportUrl: prefix + "/export",
+            exportUrl: prefix + "/exportInvestCashOut?walletAddress="+walletAddress+"&investCashOut=true",
             // sortName: "id",
             modalName: "充值提现",
             search: false,
@@ -352,21 +361,8 @@
                     title: '数量'
                 },
                 {
-                    field: 'contract_type',
-                    title: '类型',
-                    formatter: function(value, row, index) {
-                        var actions = [];
-                        if(row.contract_type == '0'){
-                            actions.push('购买');
-                        }else if(row.contract_type == '1'){
-                            actions.push('升级');
-                        }else if(row.contract_type == '-1'){
-                            actions.push('解约');
-                        }else{
-                            actions.push('');
-                        }
-                        return actions.join('');
-                    }
+                    field: 'contractType',
+                    title: '类型'
                 },
                 {
                     field: 'create_time',
