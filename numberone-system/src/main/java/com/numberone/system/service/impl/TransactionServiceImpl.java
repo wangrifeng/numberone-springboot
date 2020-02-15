@@ -166,9 +166,8 @@ public class TransactionServiceImpl extends ServiceImpl<TransactionMapper, Trans
     }
 
     @Override
-    public Map<String, Object> investCashOutSize() {
+    public Map<String, Object> investCashOutSize(Map<String,Object> params) {
         Map<String,Object> map = new HashMap<>();
-        Map<String,Object> params = new HashMap<>();
         params.put("transactionType","0");
         List<Map<String,Object>> invest =  transactionMapper.transactionAmountSum(params);
         if(invest.size() > 0){

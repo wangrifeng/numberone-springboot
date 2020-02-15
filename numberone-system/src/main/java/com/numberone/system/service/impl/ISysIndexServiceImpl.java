@@ -42,7 +42,11 @@ public class ISysIndexServiceImpl implements ISysIndexService {
         Future<Integer> todayNewPersonCountFuture = executor.submit(() -> userService.todayNewPersonCount());
         Future<BigDecimal> yesterdaySignIncomeCountFuture = executor.submit(() -> inComeService.yesterdaySignIncomeCount());
         Future<Map<String,Object>> balanceSum = executor.submit(() -> walletService.balanceSum());
-        Future<Map<String,Object>> amountSum = executor.submit(() -> transactionService.investCashOutSize());
+        Future<Map<String,Object>> amountSum = executor.submit(() -> transactionService.investCashOutSize(new HashMap<>()));
+        Map<String,Object> params = new HashMap<>();
+        params.put("today","true");
+        Future<Map<String,Object>> todayAmountSum = executor.submit(() -> transactionService.investCashOutSize(params));
+
 
         Map<String,Object> result = new HashMap<>();
         try {
@@ -54,6 +58,8 @@ public class ISysIndexServiceImpl implements ISysIndexService {
             result.put("mdcBalance",balanceSum.get().get("mdcBalance"));
             result.put("invest",amountSum.get().get("invest"));
             result.put("cashOut",amountSum.get().get("cashOut"));
+            result.put("todayInvest",todayAmountSum.get().get("invest"));
+            result.put("todayCashOut",todayAmountSum.get().get("cashOut"));
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

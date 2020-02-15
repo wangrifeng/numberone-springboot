@@ -279,6 +279,9 @@
         <if test='transactionType!=null and transactionType!=""'>
             and transaction_type = #{transactionType}
         </if>
+        <if test='today!=null and today!=""'>
+            and DATE_FORMAT(create_time,'y%m%d') = DATE_FORMAT(now(),'y%m%d')
+        </if>
         group by transaction_type
 
     </select>
