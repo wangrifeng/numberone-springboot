@@ -105,20 +105,20 @@
                 <img id="code" src="/img/code.png" style="position:absolute;right:40px;width: 25%;" onclick="getVerCode()"/>
                 <div style="position:absolute;right:40px;top:25px;width: 25%;font-size: 23px;display: none;border-radius: 5px ;background: lightgray;color: white" id="timer" ><i id="timerText">60</i> s</div>
             </div>
-            <div class="line">
+            <div class="line parent-div">
                 <input name="password1" type="password" class="registerInput" placeholder="请输入登录密码">
-                <img id="showImg" src="/img/open.png" style="width: 5%; margin-top:-30px;margin-left: 270px" onclick="showPass()">
-                <img id="hideImg" src="/img/close.png" style="width: 5%; margin-top:-27px;margin-left: 270px;display: none" onclick="hidePass()">
+                <img id="showImg" src="/img/open.png" style="width: 5%; position:absolute;right:40px;top:25px;" onclick="showPass()">
+                <img id="hideImg" src="/img/close.png" style="width: 5%; position:absolute;right:40px;top:25px;display: none" onclick="hidePass()">
             </div>
-            <div class="line ">
+            <div class="line parent-div">
                 <input name="password2" type="password" class="registerInput" placeholder="请再次输入登录密码">
-                <img id="showImg2" src="/img/open.png" style="width: 5%; margin-top:-30px;margin-left: 270px" onclick="showPass2()">
-                <img id="hideImg2" src="/img/close.png" style="width: 5%; margin-top:-27px;margin-left: 270px;display: none" onclick="hidePass2()">
+                <img id="showImg2" src="/img/open.png" style="width: 5%; position:absolute;right:40px;top:25px;" onclick="showPass2()">
+                <img id="hideImg2" src="/img/close.png" style="width: 5%; position:absolute;right:40px;top:25px;;display: none" onclick="hidePass2()">
             </div>
-            <div class="line ">
+            <div class="line parent-div">
                 <input name="payPassWord" type="password" class="registerInput" placeholder="请输入交易密码（6位数字）">
-                <img id="showImg3" src="/img/open.png" style="width: 5%; margin-top:-30px;margin-left: 270px" onclick="showPass3()">
-                <img id="hideImg3" src="/img/close.png" style="width: 5%; margin-top:-27px;margin-left: 270px;display: none" onclick="hidePass3()">
+                <img id="showImg3" src="/img/open.png" style="width: 5%; position:absolute;right:40px;top:25px;" onclick="showPass3()">
+                <img id="hideImg3" src="/img/close.png" style="width: 5%; position:absolute;right:40px;top:25px;;display: none" onclick="hidePass3()">
             </div>
             <div class="line ">
                 <input name="shareCode" type="text"  class="registerInput" placeholder="推荐码"
@@ -138,6 +138,10 @@
     $(function () {
         $("#code").css("top",($("#verCode").height()-$("#code").height())/2+10 + "px");
         $("#timer").css("top",($("#verCode").height()-$("#code").height())/2+10 + "px");
+
+        $(".parent-div img").each(function (index,img) {
+            $(img).css("top",($(img).parent().children("input").height()-10)/2+10 + "px");
+        })
     })
 
     function submit() {
