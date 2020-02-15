@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.numberone.system.mapper.WalletMapper">
 
-    <select id="getWallets" resultType="java.util.Map">
+    <select id="getWallets" resultType="com.numberone.system.domain.WalletVo">
         select w.wallet_id,  w.address,   w.ustd_blance, w.mdc_blance,  w.create_time ,u.user_name from mdc_wallet w,sys_user u
         where w.user_id = u.user_id
         <if test='userName!=null and userName!=""'>

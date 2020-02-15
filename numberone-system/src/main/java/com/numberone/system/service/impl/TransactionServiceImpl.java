@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.numberone.common.base.AjaxResult;
-import com.numberone.system.domain.SysConfig;
-import com.numberone.system.domain.Transaction;
+import com.numberone.system.domain.*;
 import com.numberone.system.domain.Wallet;
 import com.numberone.system.mapper.SysConfigMapper;
 import com.numberone.system.mapper.TransactionMapper;
@@ -111,6 +110,26 @@ public class TransactionServiceImpl extends ServiceImpl<TransactionMapper, Trans
     @Override
     public List<Map<String,Object>> getTransaction(Map<String,Object> params) {
         return transactionMapper.getTransaction(params);
+    }
+
+    @Override
+    public List<TransactionVo> exportTransaction(Map<String, Object> params) {
+        return transactionMapper.exportTransaction(params);
+    }
+
+    @Override
+    public List<InvestCashOutVo> exportInvestCashOut(Map<String, Object> params) {
+        return transactionMapper.exportInvestCashOut(params);
+    }
+
+    @Override
+    public List<Map<String,Object>> investCashOut(Map<String,Object> params) {
+        return transactionMapper.getTransaction(params);
+    }
+
+    @Override
+    public List<ContractVo> getContract(Map<String,Object> params) {
+        return transactionMapper.getContract(params);
     }
 
     @Override

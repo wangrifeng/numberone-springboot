@@ -2,6 +2,7 @@ package com.numberone.system.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.numberone.system.domain.Wallet;
+import com.numberone.system.domain.WalletVo;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.Map;
 @Component
 public interface WalletMapper extends BaseMapper<Wallet> {
 
-    List<Map<String,Object>> getWallets(Map<String,Object> params);
+    List<WalletVo> getWallets(Map<String,Object> params);
 
     Map<String,Object> getBalanceSum(Map<String,Object> params);
 

@@ -28,6 +28,9 @@
                                     class="fa fa-search"></i>&nbsp;搜索</a>
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
                                     class="fa fa-refresh"></i>&nbsp;重置</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.table.exportExcel()">
+                                <i class="fa fa-download"></i>&nbsp;导出
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -66,10 +69,10 @@
             // removeUrl: prefix + "/remove",
             // exportUrl: prefix + "/export",
             // sortName: "id",
+            exportUrl: prefix + "/exportWallet",
             modalName: "钱包信息",
             search: false,
             showExport: false,
-            id:"walletTable",
             columns: [{
                 checkbox: true
             },
