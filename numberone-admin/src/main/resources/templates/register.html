@@ -154,7 +154,7 @@
             return;
         }
 
-        if (!payPassWord ) {
+        if (!payPassWord || payPassWord.length !== 6) {
             alert("请输入交易密码（6位数字）");
             return;
         }
