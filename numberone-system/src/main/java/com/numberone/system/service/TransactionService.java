@@ -30,6 +30,11 @@ public interface TransactionService extends IService<Transaction> {
 
     List<Map<String,Object>> getTransaction(Map<String,Object> params);
 
+    List<Map<String,Object>> investCashOut(Map<String,Object> params);
+
+    List<Map<String,Object>> getContract(Map<String,Object> params);
+
+
     AjaxResult personHandleCashOut(Map<String,Object> params) throws InterruptedException, ExecutionException, CipherException, IOException;
 
     Map<String,Object> investCashOutSize();

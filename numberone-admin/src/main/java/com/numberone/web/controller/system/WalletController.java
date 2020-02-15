@@ -82,6 +82,24 @@ public class WalletController {
         return getDataTable(list);
     }
 
+    @PostMapping("/investCashOut")
+    @ResponseBody
+    @ApiOperation("/充值提现列表")
+    public TableDataInfo investCashOut(@RequestParam Map<String,Object> params) {
+        startPage();
+        List<Map<String,Object>> list = transactionService.investCashOut(params);
+        return getDataTable(list);
+    }
+
+    @PostMapping("/getContract")
+    @ResponseBody
+    @ApiOperation("/合约列表")
+    public TableDataInfo getContract(@RequestParam Map<String,Object> params) {
+        startPage();
+        List<Map<String,Object>> list = transactionService.getContract(params);
+        return getDataTable(list);
+    }
+
 
     /**
      * 设置请求分页数据

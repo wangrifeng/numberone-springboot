@@ -25,7 +25,14 @@
                 _fixedNumber = $.common.isEmpty(options.fixedNumber) ? 0 : options.fixedNumber;
                 _rightFixedColumns = $.common.isEmpty(options.rightFixedColumns) ? false : options.rightFixedColumns;
                 _rightFixedNumber = $.common.isEmpty(options.rightFixedNumber) ? 0 : options.rightFixedNumber;
-                $('#bootstrap-table').bootstrapTable({
+                var id="";
+                if(typeof(options.id) == "undefined"){
+                	id="#bootstrap-table";
+				}else{
+                	id="#"+options.id;
+				}
+                debugger;
+                $(id).bootstrapTable({
                     url: options.url,                                   // 请求后台的URL（*）
                     contentType: "application/x-www-form-urlencoded",   // 编码类型
                     method: 'post',                                     // 请求方式（*）
@@ -108,9 +115,16 @@
 				return '<a href="#" class="tooltip-show" data-toggle="tooltip" title="' + _value + '">' + _text +'</a>';
 			},
             // 搜索-默认第一个form
-            search: function(formId) {
+            search: function(formId,tableId) {
             	var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
-    		    var params = $("#bootstrap-table").bootstrapTable('getOptions');
+                var id="";
+                if(typeof(tableId) == "undefined"){
+                    id="#bootstrap-table";
+                }else{
+                    id="#"+tableId;
+                }
+                debugger;
+    		    var params = $(id).bootstrapTable('getOptions');
     		    params.queryParams = function(params) {
                     var search = {};
                     $.each($("#" + currentId).serializeArray(), function(i, field) {
@@ -123,7 +137,7 @@
                     search.isAsc = params.order;
     		        return search;
     		    }
-    		    $("#bootstrap-table").bootstrapTable('refresh', params);
+    		    $(id).bootstrapTable('refresh', params);
     		},
     		// 导出数据
     		exportExcel: function(formId) {

@@ -114,6 +114,16 @@ public class TransactionServiceImpl extends ServiceImpl<TransactionMapper, Trans
     }
 
     @Override
+    public List<Map<String,Object>> investCashOut(Map<String,Object> params) {
+        return transactionMapper.getTransaction(params);
+    }
+
+    @Override
+    public List<Map<String,Object>> getContract(Map<String,Object> params) {
+        return transactionMapper.getContract(params);
+    }
+
+    @Override
     public AjaxResult personHandleCashOut(Map<String, Object> params) throws InterruptedException, ExecutionException, CipherException, IOException {
         String ids = (String) params.get("ids");
         String type = (String) params.get("type");
