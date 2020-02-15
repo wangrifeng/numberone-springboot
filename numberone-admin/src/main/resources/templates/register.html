@@ -104,9 +104,13 @@
             </div>
             <div class="line ">
                 <input name="password2" type="password" class="registerInput" placeholder="请再次输入登录密码">
+                <img id="showImg2" src="/img/open.png" style="width: 5%; margin-top:-30px;margin-left: 270px" onclick="showPass2()">
+                <img id="hideImg2" src="/img/close.png" style="width: 5%; margin-top:-27px;margin-left: 270px;display: none" onclick="hidePass2()">
             </div>
             <div class="line ">
                 <input name="payPassWord" type="password" class="registerInput" placeholder="请输入交易密码（6位数字）">
+                <img id="showImg3" src="/img/open.png" style="width: 5%; margin-top:-30px;margin-left: 270px" onclick="showPass3()">
+                <img id="hideImg3" src="/img/close.png" style="width: 5%; margin-top:-27px;margin-left: 270px;display: none" onclick="hidePass3()">
             </div>
             <div class="line ">
                 <input name="shareCode" type="text"  class="registerInput" placeholder="推荐码"
@@ -198,6 +202,34 @@
         $("#hideImg").hide();
         $("#showImg").show();
     }
+
+
+    function showPass2() {
+        $("input[name='password2']").attr("type","text");
+        $("#showImg2").hide();
+        $("#hideImg2").show();
+    }
+
+    function hidePass2() {
+        $("input[name='password2']").attr("type","password");
+        $("#hideImg2").hide();
+        $("#showImg2").show();
+    }
+
+
+    function showPass3() {
+        $("input[name='payPassWord']").attr("type","text");
+        $("#showImg3").hide();
+        $("#hideImg3").show();
+    }
+
+    function hidePass3() {
+        $("input[name='payPassWord']").attr("type","password");
+        $("#hideImg3").hide();
+        $("#showImg3").show();
+    }
+
+
 
     function getVerCode() {
         var userName = $("input[name='userName']").val();
