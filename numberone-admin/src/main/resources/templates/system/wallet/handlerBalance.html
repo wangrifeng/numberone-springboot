@@ -7,25 +7,35 @@
 		<form class="form-horizontal m" id="form-balance-edit">
 			<input name="walletAddress" type="hidden"   th:value="${wallet.walletAddress}"   />
 			<input name="type" id="type" type="hidden"   th:value="${wallet.type}"   />
-			<div class="form-group">
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label ">代币类型</label>
+                <div class="col-sm-8">
+                    <select id="walletType" name="walletType"  class="form-control">
+                        <option th:value="0">USDT</option>
+                        <option th:value="1">MDC</option>
+                    </select>
+                </div>
+            </div>
+			<div class="form-group" id="oldUsdt">
 				<label class="col-sm-3 control-label ">USDT余额</label>
 				<div class="col-sm-8">
 					<input class="form-control" id="oldUsdtBalance" readonly="readonly" name="oldUsdtBalance" type="text"   th:value="${wallet.usdtBalance}"/>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group" id="changeUsdt">
 				<label class="col-sm-3 control-label " th:text="${wallet.type == '0' ? 'USDT充值金额' : 'USDT扣费金额'}"></label>
 				<div class="col-sm-8">
 					<input class="form-control" type="text"  id="usdtChange" name="usdtChange" th:value="0"/>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group" id="oldMdc" style="display: none">
 				<label class="col-sm-3 control-label ">MDC余额</label>
 				<div class="col-sm-8">
 					<input class="form-control" id="oldMdcBalance" readonly="readonly" type="text" name="oldMdcBalance"   th:value="${wallet.mdcBalance}"/>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group" id="changeMdc" style="display: none">
 				<label class="col-sm-3 control-label" th:text="${wallet.type == '0' ? 'MDC充值金额' : 'MDC扣费金额'}"></label>
 				<div class="col-sm-8">
 					<input class="form-control" type="text"  id="MdcChange" name="MdcChange" th:value="0"/>
@@ -45,6 +55,22 @@
 
 
 
+        $("#walletType").on("change",function () {
+            var walletType = $("#walletType").val();
+            if(walletType == '0'){
+                $("#oldMdc").hide();
+                $("#changeMdc").hide();
+                $("#MdcChange").val("0");
+                $("#oldUsdt").show();
+                $("#changeUsdt").show();
+            }else if(walletType == "1"){
+                $("#oldUsdt").hide();
+                $("#changeUsdt").hide();
+                $("#usdtChange").val("0");
+                $("#oldMdc").show();
+                $("#changeMdc").show();
+            }
+        });
 
         
         function submitHandler() {
@@ -55,14 +81,19 @@
 	        	var oldMdcBalance = $("#oldMdcBalance").val();
 	        	var oldUsdtBalance = $("#oldUsdtBalance").val();
 	        	var type = $("#type").val();
-	        	if(!reg.test(usdtChange)){
+                var walletType = $("#walletType").val();
+	        	if(walletType == '0' && !reg.test(usdtChange)){
 	        		layer.alert("USDT金额请输入数字");
-				}else if(!reg.test(mdcChange)){
+				}else if(walletType == '1' && !reg.test(mdcChange)){
 					layer.alert("MDC金额请输入数字");
 				}else if(type == "1" && parseFloat(oldUsdtBalance) < parseFloat(usdtChange)){
-					layer.alert("USDT余额不足扣费");
+	        	    if(walletType == '0'){
+                        layer.alert("USDT余额不足扣费");
+                    }
 				}else if(type == "1" && parseFloat(oldMdcBalance) < parseFloat(mdcChange)){
-					layer.alert("MDC余额不足扣费");
+                    if(walletType == '1'){
+                        layer.alert("MDC余额不足扣费");
+                    }
 				}else{
 					$.operate.save(prefix + "/balanceChange", $('#form-balance-edit').serialize());
 				}
