@@ -125,9 +125,10 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
-            <input id="transactionId" type="hidden" name="transactionId" th:value="${transaction == null ? '' : transaction.transactionId}" />
-
             <form id="contract-form" >
+                <input id="transactionId" type="hidden" name="transactionId" th:value="${transaction == null ? '' : transaction.transactionId}" />
+
+
                 <div class="select-list">
                     <ul>
                         <li class="select-time">
