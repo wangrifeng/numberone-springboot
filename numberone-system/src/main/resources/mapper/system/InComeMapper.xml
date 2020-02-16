@@ -29,6 +29,9 @@
         <if test="map.level != null and map.level != ''">
             and c.type =1 and c.level = #{map.level}
         </if>
+        <if test="map.userId != null and map.userId != ''">
+            and u.user_id = #{map.userId}
+        </if>
         order by sel_date desc , salary desc
     </select>
 

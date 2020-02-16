@@ -9,6 +9,8 @@
     <div class="row">
         <div class="col-sm-12 search-collapse">
             <form id="post-form">
+                <input id="userId" type="hidden" name="userId" th:value="${income == null ? '' : income.userId}" />
+
                 <div class="select-list">
                     <ul>
                         <li>
@@ -127,6 +129,8 @@
             ]
         };
         $.table.init(options);
+        $.table.search();
+        $("#userId").val("");
     });
 </script>
 </body>

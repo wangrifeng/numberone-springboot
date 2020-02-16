@@ -94,7 +94,7 @@ public class WalletServiceImpl extends ServiceImpl<WalletMapper, Wallet> impleme
         wrapper.eq("address", params.get("walletAddress"));
         Wallet wallet = walletMapper.selectList(wrapper).get(0);
 
-        BigDecimal oldUsdtBalance = new BigDecimal(params.get("MdcChange").toString());
+        BigDecimal oldUsdtBalance = new BigDecimal(params.get("oldUsdtBalance").toString());
         BigDecimal usdtChange = new BigDecimal(params.get("usdtChange").toString());
         BigDecimal oldMdcBalance = new BigDecimal(params.get("oldMdcBalance").toString());
         BigDecimal MdcChange = new BigDecimal(params.get("MdcChange").toString());
@@ -113,6 +113,7 @@ public class WalletServiceImpl extends ServiceImpl<WalletMapper, Wallet> impleme
                 transaction.setTransactionStatus("1");
                 //0-充值
                 transaction.setTransactionType("0");
+                transaction.setRemark((String) params.get("remark"));
                 transactionMapper.insert(transaction);
             }
             if(MdcChange.doubleValue() > 0){
@@ -127,6 +128,7 @@ public class WalletServiceImpl extends ServiceImpl<WalletMapper, Wallet> impleme
                 transaction.setTransactionStatus("1");
                 //0-充值
                 transaction.setTransactionType("0");
+                transaction.setRemark((String) params.get("remark"));
                 transactionMapper.insert(transaction);
             }
         } else if ("1".equals(params.get("type"))) {

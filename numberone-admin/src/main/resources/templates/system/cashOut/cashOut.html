@@ -9,6 +9,7 @@
     <div class="row">
         <div class="col-sm-12 search-collapse">
             <form id="post-form">
+                <input id="transactionId" type="hidden" name="transactionId" th:value="${transaction == null ? '' : transaction.transactionId}" />
                 <div class="select-list">
                     <ul>
                         <li class="select-time">
@@ -35,6 +36,9 @@
                                     class="fa fa-search"></i>&nbsp;搜索</a>
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
                                     class="fa fa-refresh"></i>&nbsp;重置</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.table.exportExcel()">
+                                <i class="fa fa-download"></i>&nbsp;导出
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -68,7 +72,7 @@
             // createUrl: prefix + "/add",
             // updateUrl: prefix + "/edit/{id}",
             // removeUrl: prefix + "/remove",
-            // exportUrl: prefix + "/export",
+            exportUrl: "/system/wallet/exportCashOut",
             // sortName: "id",
             modalName: "提现记录",
             search: false,
@@ -139,6 +143,8 @@
             ]
         };
         $.table.init(options);
+        $.table.search();
+        $("#transactionId").val("");
     });
     function cashOutAuditing(ids,type) {
         //alert(ids);

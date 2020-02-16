@@ -48,7 +48,27 @@ public class WalletController {
     @ApiOperation("/钱包信息")
     public String walletInfo(@RequestParam Map<String,Object> params,ModelMap mmap) {
         mmap.put("wallet",params);
+        return prefix+"/walletDetail";
+    }
+
+
+
+    @GetMapping("/trans")
+    @ApiOperation("/转账信息")
+    public String trans(@RequestParam Map<String,Object> params,ModelMap mmap) {
+        if(params.get("transactionId") != null){
+            mmap.put("transaction",params);
+        }
         return prefix+"/walletInfo";
+    }
+
+    @GetMapping("/contract")
+    @ApiOperation("/钱包信息")
+    public String contract(@RequestParam Map<String,Object> params,ModelMap mmap) {
+        if(params.get("transactionId") != null){
+            mmap.put("transaction",params);
+        }
+        return prefix+"/contract";
     }
 
     @GetMapping("/handlerBalance")
@@ -127,6 +147,25 @@ public class WalletController {
         return util.exportExcel(list, "充值提现信息");
     }
 
+    @Log(title = "充值信息", businessType = BusinessType.EXPORT)
+    @PostMapping("/exportInvest")
+    @ResponseBody
+    public AjaxResult exportInvest(@RequestParam Map<String,Object> params)
+    {
+        List<InvestVo> list = transactionService.exportInvest(params);
+        ExcelUtil<InvestVo> util = new ExcelUtil<>(InvestVo.class);
+        return util.exportExcel(list, "充值提现信息");
+    }
+
+    @Log(title = "提现信息", businessType = BusinessType.EXPORT)
+    @PostMapping("/exportCashOut")
+    @ResponseBody
+    public AjaxResult exportCashOut(@RequestParam Map<String,Object> params)
+    {
+        List<CashOutVo> list = transactionService.exportCashOut(params);
+        ExcelUtil<CashOutVo> util = new ExcelUtil<>(CashOutVo.class);
+        return util.exportExcel(list, "充值提现信息");
+    }
     @PostMapping("/getContract")
     @ResponseBody
     @ApiOperation("/合约列表")

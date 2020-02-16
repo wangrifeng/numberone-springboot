@@ -18,6 +18,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,8 +35,11 @@ public class InComeController {
     private String prefix = "system/income";
 
     @GetMapping()
-    public String operlog()
+    public String operlog(@RequestParam Map<String,Object> params, ModelMap mmap)
     {
+        if(params.get("userId") != null){
+            mmap.put("income",params);
+        }
         return prefix + "/income";
     }
 

@@ -2,10 +2,7 @@ package com.numberone.system.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.numberone.common.base.AjaxResult;
-import com.numberone.system.domain.ContractVo;
-import com.numberone.system.domain.InvestCashOutVo;
-import com.numberone.system.domain.Transaction;
-import com.numberone.system.domain.TransactionVo;
+import com.numberone.system.domain.*;
 import org.web3j.crypto.CipherException;
 
 import java.io.IOException;
@@ -36,6 +33,10 @@ public interface TransactionService extends IService<Transaction> {
     List<TransactionVo> exportTransaction(Map<String,Object> params);
 
     List<InvestCashOutVo> exportInvestCashOut(Map<String,Object> params);
+
+    List<InvestVo> exportInvest(Map<String,Object> params);
+
+    List<CashOutVo> exportCashOut(Map<String, Object> params);
 
     List<Map<String,Object>> investCashOut(Map<String,Object> params);
 

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="post-form" >
+                <div class="select-list">
+                    <input id="walletAddress" th:value="${wallet.walletAddress}" type="hidden" />
+                    <ul>
+                        <li class="select-time">
+                            <label>交易时间： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="startTime"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="endTime"/>
+                        </li>
+
+                        <li>
+                            交易类型：<select name="transactionType" >
+                            <option value="">所有</option>
+                            <option th:value="0">充值</option>
+                            <option th:value="1">提现</option>
+                            <option th:value="2">转账</option>
+                            <option th:value="3">推广奖励</option>
+                            <option th:value="4">合约</option>
+                            <option th:value="5">购买进阶卡</option>
+                            <option th:value="6">每日收益结算</option>
+                            <option th:value="7">mdc兑换usdt</option>
+                            <option th:value="8">扣费</option>
+                        </select>
+                        </li>
+                        <li>
+                            交易状态：<select name="transactionStatus" >
+                            <option value="">所有</option>
+                            <option th:value="0">交易中</option>
+                            <option th:value="1">交易成功</option>
+                            <option th:value="-1">交易失败</option>
+                            <option th:value="-2">审核不通过</option>
+                        </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+            <!--				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:post:export">-->
+            <!--		            <i class="fa fa-download"></i> 导出-->
+            <!--		        </a>-->
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script type="text/html" id="rightBar">
+    <div class="layui-btn-group">
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="info"><i class="fa fa-trash-o" title="详情">详情</i></a>
+    </div>
+</script>
+<script th:inline="javascript">
+    // var editFlag = [[${@permission.hasPermi('system:post:edit')}]];
+    // var removeFlag = [[${@permission.hasPermi('system:post:remove')}]];
+    var datas = [[${@dict.getType('sys_normal_disable')}]];
+    var prefix = ctx + "system/wallet";
+    var walletAddress = $("#walletAddress").val();
+    $(function () {
+        var tableId = "walletTable"
+        var options = {
+            url: prefix + "/transaction?walletAddress="+walletAddress,
+            // createUrl: prefix + "/add",
+            // updateUrl: prefix + "/edit/{id}",
+            // removeUrl: prefix + "/remove",
+            // exportUrl: prefix + "/export",
+            // sortName: "id",
+            modalName: "钱包信息",
+            search: false,
+            showExport: false,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'transaction_id',
+                    title: '交易记录id'
+                },
+                {
+                    field: 'create_time',
+                    title: '交易时间'
+                },
+                {
+                    field: 'fromUserName',
+                    title: '用户名称',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        //alert(row.fromUserName);
+                        if(row.fromUserName == null ||row.fromUserName == ''){
+                            actions.push(row.toUserName);
+                        }else{
+                            actions.push(row.fromUserName);
+                        }
+                        return actions.join('');
+                    }
+                },
+                {
+                    field: 'from_amount',
+                    title: '交易数量',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if(row.from_amount == null || row.from_amount == ''){
+                            actions.push(row.to_amount);
+                        }else{
+                            actions.push(row.from_amount);
+                        }
+                        return actions.join('');
+                    }
+                },
+                {
+                    field: 'from_wallet_type',
+                    title: '交易币种',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if(row.from_wallet_type != null && row.from_wallet_type != ''){
+                            if(row.from_wallet_type == '0'){
+                                actions.push('USDT');
+                            }else if(row.from_wallet_type == '1'){
+                                actions.push('MDC');
+                            }else{
+                                actions.push('');
+                            }
+                        }else{
+                            if(row.to_wallet_type == '0'){
+                                actions.push('USDT');
+                            }else if(row.to_wallet_type == '1'){
+                                actions.push('MDC');
+                            }else{
+                                actions.push('');
+                            }
+                        }
+
+                        return actions.join('');
+                    }
+                },
+                {
+                    field: 'transaction_type',
+                    title: '交易类型',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if(row.transaction_type == '0'){
+                            actions.push('<a  href="#" onclick="getInvest(\'' + row.transaction_id + '\')">充值</a>');
+                        }else if(row.transaction_type == '1'){
+                            actions.push('<a  href="#" onclick="getCashOut(\'' + row.transaction_id + '\')">提现</a>');
+                        }else if(row.transaction_type == '2'){
+                            if(row.from_wallet_address == walletAddress){
+                                actions.push('<a  href="#" onclick="getTrans(\'' + row.transaction_id + '\')">转出</a>');
+                            }else if(row.to_wallet_address == walletAddress){
+                                actions.push('<a  href="#" onclick="getTrans(\'' + row.transaction_id + '\')">转入</a>');
+                            }else{
+                                actions.push('<a  href="#" onclick="getTrans(\'' + row.transaction_id + '\')">转账</a>');
+                            }
+
+                        }else if(row.transaction_type == '3'){
+                            actions.push('推广奖励');
+                        }else if(row.transaction_type == '4'){
+                            actions.push('<a  href="#" onclick="getContract(\'' + row.transaction_id + '\')">合约</a>');
+                        }else if(row.transaction_type == '5'){
+                            actions.push('购买进阶卡');
+                        }else if(row.transaction_type == '6'){
+                            actions.push('<a  href="#" onclick="getIncome(\'' + row.to_user_id + '\')">每日收益结算</a>');
+                        }else if(row.transaction_type == '7'){
+                            actions.push('mdc兑换usdt');
+                        }else if(row.transaction_type == '8'){
+                            actions.push('扣费');
+                        }else{
+                            actions.push('');
+                        }
+                        return actions.join('');
+                    }
+                },
+                {
+                    field: 'transactionStatus',
+                    title: '状态'
+                }
+            ]
+        };
+
+        $.table.init(options);
+    });
+
+    function getContract(id) {
+        var index = layer.open({
+            type: 2,
+            area: ['600px', '500px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "详细",
+            content: prefix+"/contract?transactionId="+id,
+            btn: ['关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            cancel: function(index){
+                return true;
+            }
+        });
+        layer.full(index);
+    }
+
+    function getIncome(id) {
+        var index = layer.open({
+            type: 2,
+            area: ['600px', '500px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "详细",
+            content: "/system/income?userId="+id,
+            btn: ['关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            cancel: function(index){
+                return true;
+            }
+        });
+        layer.full(index);
+    }
+
+    function getTrans(id) {
+        var index = layer.open({
+            type: 2,
+            area: ['600px', '500px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "转账详细",
+            content: prefix+"/trans?transactionId="+id,
+            btn: ['关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            cancel: function(index){
+                return true;
+            }
+        });
+        layer.full(index);
+    }
+
+    function getInvest(id) {
+        var index = layer.open({
+            type: 2,
+            area: ['600px', '500px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "充值详细",
+            content: "/system/invest?transactionId="+id,
+            btn: ['关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            cancel: function(index){
+                return true;
+            }
+        });
+        layer.full(index);
+    }
+    function getCashOut(id) {
+        var index = layer.open({
+            type: 2,
+            area: ['600px', '500px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "提现详细",
+            content: "/system/invest/cashOutHtml?transactionId="+id,
+            btn: ['关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            cancel: function(index){
+                return true;
+            }
+        });
+        layer.full(index);
+    }
+    function getWalletInfo(id) {
+        var index = layer.open({
+            type: 2,
+            area: ['600px', '500px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "钱包详细",
+            content: prefix+"/walletInfo",
+            btn: ['关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            cancel: function(index){
+                return true;
+            }
+        });
+        layer.full(index);
+        alert(id);
+    }
+</script>
+</body>
+</html>

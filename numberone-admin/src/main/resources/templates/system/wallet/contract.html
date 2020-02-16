@@ -14,160 +14,163 @@
 </ul>-->
 <!--<div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="trans">-->
-        <div class="container-div">
-            <div class="row">
-                <div class="col-sm-12 search-collapse">
-                    <form id="trans-form" >
-                        <input id="transactionId" type="hidden" name="transactionId" th:value="${transaction == null ? '' : transaction.transactionId}" />
-                        <div class="select-list">
-                            <ul>
-                                <li class="select-time">
-                                    <label>交易时间： </label>
-                                    <input type="text" class="time-input"  placeholder="开始时间" name="startTime"/>
-                                    <span>-</span>
-                                    <input type="text" class="time-input"  placeholder="结束时间" name="endTime"/>
-                                </li>
-                                <li>
-                                    钱包用户：<input type="text" name="fromUserName"/>
-                                </li>
-                                <li>
-                                    转出地址：<input type="text" name="toWalletAddress"/>
-                                </li>
-                                <li>
-                                    <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search('trans-form','trans-table')"><i
-                                            class="fa fa-search"></i>&nbsp;搜索</a>
-                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('trans-form')"><i
-                                            class="fa fa-refresh"></i>&nbsp;重置</a>
-                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.table.exportExcel('trans-form','exportTransaction','trans-table')">
-                                        <i class="fa fa-download"></i>&nbsp;导出
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </form>
+<!--<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="trans-form" >
+                <input id="transactionId" type="hidden" name="transactionId" th:value="${transaction == null ? '' : transaction.transactionId}" />
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <label>交易时间： </label>
+                            <input type="text" class="time-input"  placeholder="开始时间" name="startTime"/>
+                            <span>-</span>
+                            <input type="text" class="time-input"  placeholder="结束时间" name="endTime"/>
+                        </li>
+                        <li>
+                            钱包用户：<input type="text" name="fromUserName"/>
+                        </li>
+                        <li>
+                            转出地址：<input type="text" name="toWalletAddress"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search('trans-form','trans-table')"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('trans-form')"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.table.exportExcel('trans-form','exportTransaction','trans-table')">
+                                <i class="fa fa-download"></i>&nbsp;导出
+                            </a>
+                        </li>
+                    </ul>
                 </div>
+            </form>
+        </div>
 
 
-                <div class="col-sm-12 select-table table-striped">
-                    <table id="trans-table" data-mobile-responsive="true"></table>
-                </div>
-            </div>
-        </div><!--
-    </div>
-    <div role="tabpanel" class="tab-pane" id="investCashOut">
-        <div class="container-div">
-            <div class="row">
-                <div class="col-sm-12 search-collapse">
-                    <form id="investCashOut-form" >
-                        <div class="select-list">
-                            <ul>
-                                <li class="select-time">
-                                    <label>交易时间： </label>
-                                    <input type="text" class="time-input"  placeholder="开始时间" name="startTime"/>
-                                    <span>-</span>
-                                    <input type="text" class="time-input"  placeholder="结束时间" name="endTime"/>
-                                </li>
-                                <li>
-                                    钱包用户：<input type="text" name="fromUserName"/>
-                                </li>
-
-                                <li>
-                                    交易类型：<select name="transactionType" >
-                                    <option value="">所有</option>
-                                    <option th:value="0">充值</option>
-                                    <option th:value="1">提现</option>
-                                </select>
-                                </li>
-                                <li>
-                                    钱包地址：<input type="text" name="walletAddress"/>
-                                </li>
-                                <li>
-                                    币种：<select name="toWalletType" >
-                                    <option value="">所有</option>
-                                    <option th:value="0">USDT</option>
-                                    <option th:value="1">MDC</option>
-                                </select>
-                                </li>
-                                <li>
-                                    交易状态：<select name="transactionStatus" >
-                                    <option value="">所有</option>
-                                    <option th:value="0">交易中</option>
-                                    <option th:value="1">交易成功</option>
-                                    <option th:value="-1">交易失败</option>
-                                    <option th:value="-2">审核不通过</option>
-                                </select>
-                                </li>
-                                <li>
-                                    <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search('investCashOut-form','investCashOut-table')"><i
-                                            class="fa fa-search"></i>&nbsp;搜索</a>
-                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('investCashOut-form')"><i
-                                            class="fa fa-refresh"></i>&nbsp;重置</a>
-                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.table.exportExcel('investCashOut-form','exportInvestCashOut','investCashOut-table')">
-                                        <i class="fa fa-download"></i>&nbsp;导出
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </form>
-                </div>
-
-
-                <div class="col-sm-12 select-table table-striped">
-                    <table id="investCashOut-table" data-mobile-responsive="true"></table>
-                </div>
-            </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="trans-table" data-mobile-responsive="true"></table>
         </div>
     </div>
-    <div role="tabpanel" class="tab-pane" id="contract">
-        <div class="container-div">
-            <div class="row">
-                <div class="col-sm-12 search-collapse">
-                    <form id="contract-form" >
-                        <div class="select-list">
-                            <ul>
-                                <li class="select-time">
-                                    <label>交易时间： </label>
-                                    <input type="text" class="time-input"  placeholder="开始时间" name="startTime"/>
-                                    <span>-</span>
-                                    <input type="text" class="time-input"  placeholder="结束时间" name="endTime"/>
-                                </li>
-                                <li>
-                                    用户账号：<input type="text" name="userName"/>
-                                </li>
-                                <li>
-                                    合约：<input type="text" name="contractName"/>
-                                </li>
-                                <li>
-                                    类型：<select name="contractType" >
-                                    <option value="">所有</option>
-                                    <option th:value="0">签约</option>
-                                    <option th:value="1">升级</option>
-                                    <option th:value="-1">解约</option>
+</div>
+</div>
+<div role="tabpanel" class="tab-pane" id="investCashOut">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="investCashOut-form" >
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <label>交易时间： </label>
+                            <input type="text" class="time-input"  placeholder="开始时间" name="startTime"/>
+                            <span>-</span>
+                            <input type="text" class="time-input"  placeholder="结束时间" name="endTime"/>
+                        </li>
+                        <li>
+                            钱包用户：<input type="text" name="fromUserName"/>
+                        </li>
 
-                                </select>
-                                </li>
-                                <li>
-                                    <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search('contract-form','contract-table')"><i
-                                            class="fa fa-search"></i>&nbsp;搜索</a>
-                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('contract-form')"><i
-                                            class="fa fa-refresh"></i>&nbsp;重置</a>
-                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.table.exportExcel('contract-form','exportContract','contract-table')">
-                                        <i class="fa fa-download"></i>&nbsp;导出
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </form>
+                        <li>
+                            交易类型：<select name="transactionType" >
+                            <option value="">所有</option>
+                            <option th:value="0">充值</option>
+                            <option th:value="1">提现</option>
+                        </select>
+                        </li>
+                        <li>
+                            钱包地址：<input type="text" name="walletAddress"/>
+                        </li>
+                        <li>
+                            币种：<select name="toWalletType" >
+                            <option value="">所有</option>
+                            <option th:value="0">USDT</option>
+                            <option th:value="1">MDC</option>
+                        </select>
+                        </li>
+                        <li>
+                            交易状态：<select name="transactionStatus" >
+                            <option value="">所有</option>
+                            <option th:value="0">交易中</option>
+                            <option th:value="1">交易成功</option>
+                            <option th:value="-1">交易失败</option>
+                            <option th:value="-2">审核不通过</option>
+                        </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search('investCashOut-form','investCashOut-table')"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('investCashOut-form')"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.table.exportExcel('investCashOut-form','exportInvestCashOut','investCashOut-table')">
+                                <i class="fa fa-download"></i>&nbsp;导出
+                            </a>
+                        </li>
+                    </ul>
                 </div>
+            </form>
+        </div>
 
 
-                <div class="col-sm-12 select-table table-striped">
-                    <table id="contract-table" data-mobile-responsive="true"></table>
-                </div>
-            </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="investCashOut-table" data-mobile-responsive="true"></table>
         </div>
     </div>
+</div>
+</div>
+<div role="tabpanel" class="tab-pane" id="contract">
+
+<--</div>
 </div>-->
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <input id="transactionId" type="hidden" name="transactionId" th:value="${transaction == null ? '' : transaction.transactionId}" />
+
+            <form id="contract-form" >
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <label>交易时间： </label>
+                            <input type="text" class="time-input"  placeholder="开始时间" name="startTime"/>
+                            <span>-</span>
+                            <input type="text" class="time-input"  placeholder="结束时间" name="endTime"/>
+                        </li>
+                        <li>
+                            用户账号：<input type="text" name="userName"/>
+                        </li>
+                        <li>
+                            合约：<input type="text" name="contractName"/>
+                        </li>
+                        <li>
+                            类型：<select name="contractType" >
+                            <option value="">所有</option>
+                            <option th:value="0">签约</option>
+                            <option th:value="1">升级</option>
+                            <option th:value="-1">解约</option>
+
+                        </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search('contract-form','contract-table')"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('contract-form')"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.table.exportExcel('contract-form','exportContract','contract-table')">
+                                <i class="fa fa-download"></i>&nbsp;导出
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="contract-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
 
 
 <div th:include="include :: footer"></div>
@@ -179,7 +182,7 @@
     var prefix = ctx + "system/wallet";
     /*var walletAddress = $("#walletAddress").val();*/
     $(function () {
-        var option = {
+        /*var option = {
             url: prefix + "/transaction?transactionType=2",
             // createUrl: prefix + "/add",
             // updateUrl: prefix + "/edit/{id}",
@@ -240,7 +243,7 @@
         };
         $.table.init(option);
         $.table.search('trans-form','trans-table');
-        $("#transactionId").val("");
+        $("#transactionId").val("");*/
 
 
         /*var investCashOut = {
@@ -329,10 +332,10 @@
                 }
             ]
         };
-        $.table.init(investCashOut);
+        $.table.init(investCashOut);*/
 
         var contract = {
-            url: prefix + "/getContract?walletAddress="+walletAddress,
+            url: prefix + "/getContract",
             // createUrl: prefix + "/add",
             // updateUrl: prefix + "/edit/{id}",
             // removeUrl: prefix + "/remove",
@@ -382,7 +385,10 @@
                 }
             ]
         };
-        $.table.init(contract);*/
+        $.table.init(contract);
+        $.table.search('contract-form','contract-table');
+        $("#transactionId").val("");
+
     });
     function cashOutAuditing(ids,type) {
         //alert(ids);

@@ -123,6 +123,16 @@ public class TransactionServiceImpl extends ServiceImpl<TransactionMapper, Trans
     }
 
     @Override
+    public List<InvestVo> exportInvest(Map<String, Object> params) {
+        return transactionMapper.exportInvest(params);
+    }
+
+    @Override
+    public List<CashOutVo> exportCashOut(Map<String, Object> params) {
+        return transactionMapper.exportCashOut(params);
+    }
+
+    @Override
     public List<Map<String,Object>> investCashOut(Map<String,Object> params) {
         return transactionMapper.getTransaction(params);
     }
@@ -145,7 +155,7 @@ public class TransactionServiceImpl extends ServiceImpl<TransactionMapper, Trans
             List<Wallet> walletList = walletMapper.selectList(walletEntityWrapper);
             Wallet wallet = walletList.get(0);
             BigDecimal usdt = wallet.getUstdBlance();
-            wallet.setUstdBlance(usdt.add(transaction.getFromAmount()).add(transaction.getFromAmount()));
+            wallet.setUstdBlance(usdt.add(transaction.getFromAmount()));
             walletMapper.updateById(wallet);
         }else{
             SysConfig walletPath = configMapper.checkConfigKeyUnique("WALLET_PATH");

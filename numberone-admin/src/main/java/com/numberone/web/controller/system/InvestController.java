@@ -14,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.web3j.crypto.CipherException;
 
@@ -34,14 +35,20 @@ public class InvestController extends BaseController {
     private String prefix = "system/invest";
 
     @GetMapping()
-    public String operlog()
+    public String operlog(@RequestParam Map<String,Object> params, ModelMap mmap)
     {
+        if(params.get("transactionId") != null){
+            mmap.put("transaction",params);
+        }
         return prefix + "/invest";
     }
 
     @GetMapping("/cashOutHtml")
-    public String cashOutHtml()
+    public String cashOutHtml(@RequestParam Map<String,Object> params, ModelMap mmap)
     {
+        if(params.get("transactionId") != null){
+            mmap.put("transaction",params);
+        }
         return  "system/cashOut/cashOut";
     }
 
