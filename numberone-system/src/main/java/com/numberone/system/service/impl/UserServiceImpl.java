@@ -61,14 +61,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         //count>0说明username已存在，isRepeat>0说明姓名已存在，重复需要加标识
         Integer count = userMapper.user(loginName);
-        Integer isRepeat = userMapper.isRepeat(userName);
+//        Integer isRepeat = userMapper.isRepeat(userName);
         if (count > 0) {
             //登录名称重复
             return AjaxResult.error("登录名称重复");
-        } else if (isRepeat > 0) {
-            //用户名称重复
-            return AjaxResult.error("用户名称重复");
-        } else if (sendCode == null) {
+        }
+//        else if (isRepeat > 0) {
+//            //用户名称重复
+//            return AjaxResult.error("用户名称重复");
+//        }
+        else if (sendCode == null) {
             //推荐码不存在
             return AjaxResult.error("推荐码不存在");
         } else {
