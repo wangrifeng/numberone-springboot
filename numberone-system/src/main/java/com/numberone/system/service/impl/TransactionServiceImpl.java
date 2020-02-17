@@ -1,5 +1,6 @@
 package com.numberone.system.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.web3j.abi.FunctionEncoder;
+import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Function;
@@ -22,6 +24,7 @@ import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.*;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
@@ -142,6 +145,7 @@ public class TransactionServiceImpl extends ServiceImpl<TransactionMapper, Trans
         return transactionMapper.getContract(params);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public AjaxResult personHandleCashOut(Map<String, Object> params) throws InterruptedException, ExecutionException, CipherException, IOException {
         String ids = (String) params.get("ids");
@@ -160,8 +164,12 @@ public class TransactionServiceImpl extends ServiceImpl<TransactionMapper, Trans
         }else{
             SysConfig walletPath = configMapper.checkConfigKeyUnique("WALLET_PATH");
             SysConfig walletAddress = configMapper.checkConfigKeyUnique("WALLET_ADDRESS");
-            //String wallet_Path = "D://walletTrue//UTC--2020-02-07T13-31-22.32000000Z--eb04131fbe988d43c0f9c0d8a30ccc3636994dda.json";
-            String wallet_Path = walletPath.getConfigValue();
+            String wallet_Path = "/Users/wangrifeng/wallet/UTC--2020-02-07T13-31-22.32000000Z--eb04131fbe988d43c0f9c0d8a30ccc3636994dda.json";
+            //String wallet_Path = walletPath.getConfigValue();
+            BigDecimal allBalance = getBalance(walletAddress.getConfigValue(),"0xdac17f958d2ee523a2206206994597c13d831ec7");
+            if(allBalance.doubleValue() < transaction.getFromAmount().doubleValue()){
+                return AjaxResult.error("交易失败，总钱包余额不足");
+            }
             AjaxResult transactionHash = transfer("123456",transaction.getToAmount(),wallet_Path,walletAddress.getConfigValue(),transaction.getToWalletAddress(),"0");
             if("0".equals(transactionHash.get("code").toString())){
                 transaction.setTransactionHash(transactionHash.get("msg").toString());
@@ -193,6 +201,36 @@ public class TransactionServiceImpl extends ServiceImpl<TransactionMapper, Trans
             map.put("cashOut",0);
         }
         return map;
+    }
+
+    private BigDecimal getBalance(String fromAddress,String contractAddress){
+        //查询余额变化
+        String methodName = "balanceOf";
+        List<Type> inputParameters = new ArrayList<>();
+        List<TypeReference<?>> outputParameters = new ArrayList<>();
+        Address address = new Address(fromAddress);
+        inputParameters.add(address);
+
+        TypeReference<Uint256> typeReference = new TypeReference<Uint256>() {
+        };
+        outputParameters.add(typeReference);
+        Function function = new Function(methodName, inputParameters, outputParameters);
+        String data = FunctionEncoder.encode(function);
+        org.web3j.protocol.core.methods.request.Transaction transactions = org.web3j.protocol.core.methods.request.Transaction.createEthCallTransaction(fromAddress, contractAddress, data);
+
+        EthCall ethCall;
+        BigDecimal balanceValue = new BigDecimal(0);
+        try {
+            ethCall = web3j.ethCall(transactions, DefaultBlockParameterName.LATEST).send();
+            List<Type> results = FunctionReturnDecoder.decode(ethCall.getValue(), function.getOutputParameters());
+            System.out.println(JSON.toJSON(results));
+            balanceValue = new BigDecimal((BigInteger) results.get(0).getValue()).divide(new BigDecimal("1000000"));
+            System.out.println(balanceValue);
+            return balanceValue;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return balanceValue;
     }
 
     @Transactional(rollbackFor = Exception.class)
