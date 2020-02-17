@@ -31,7 +31,7 @@ public class AllRewardJob {
     private ContractService contractService;
     @Autowired
     private ISysLogininforService sysLogininforService;
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Scheduled(cron = "0 10 0 * * ?")
     public void execute() throws BusinessException {
         InetAddress ia = null;
