@@ -2,13 +2,16 @@ package com.numberone.system.service.impl.reward;
 
 import com.numberone.common.exception.BusinessException;
 import com.numberone.system.domain.Contract;
+import com.numberone.system.domain.SysLogininfor;
 import com.numberone.system.service.ContractService;
+import com.numberone.system.service.ISysLogininforService;
 import com.numberone.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.InetAddress;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -26,10 +29,24 @@ public class AllRewardJob {
     private ContractDailyRewardServiceImpl contractDailyRewardService;
     @Autowired
     private ContractService contractService;
-
+    @Autowired
+    private ISysLogininforService sysLogininforService;
     @Transactional
     @Scheduled(cron = "0 10 0 * * ?")
     public void execute() throws BusinessException {
+        InetAddress ia = null;
+        try {
+            ia = ia.getLocalHost();
+            String localip = ia.getHostAddress();
+            SysLogininfor sysLogininfor = new SysLogininfor();
+            sysLogininfor.setLoginName("收益");
+            sysLogininfor.setMsg("当前执行收益统计的服务器为:" + localip);
+            sysLogininforService.insertLogininfor(sysLogininfor);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         //找出所有用户ids
         List<Integer> userIds = userService.findAllUserIds();
         if (userIds.size() == 0) {
@@ -49,12 +66,12 @@ public class AllRewardJob {
 
         //计算所有用户的静态收益
         for (Integer userId : userIds) {
-            contractDailyRewardService.calculateContractSalary(userId, contractCache,selDate);
+            contractDailyRewardService.calculateContractSalary(userId, contractCache, selDate);
         }
 
         //计算所有用户的额外收益
         for (Integer userId : userIds) {
-            contractDailyRewardService.calculateShareSalary(userId, contractCache,selDate);
+            contractDailyRewardService.calculateShareSalary(userId, contractCache, selDate);
         }
 
 
