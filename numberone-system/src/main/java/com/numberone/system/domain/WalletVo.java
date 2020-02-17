@@ -31,8 +31,8 @@ public class WalletVo{
      * 用户id
      */
 
-    @Excel(name="用户名称")
-    private String user_name;
+    @Excel(name="用户账号")
+    private String login_name;
     @Excel(name = "钱包地址")
     private String address;
     /**
@@ -54,12 +54,12 @@ public class WalletVo{
         this.wallet_id = wallet_id;
     }
 
-    public String getUser_name() {
-        return user_name;
+    public String getLogin_name() {
+        return login_name;
     }
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
+    public void setLogin_name(String login_name) {
+        this.login_name = login_name;
     }
 
     public String getAddress() {
