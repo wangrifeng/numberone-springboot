@@ -164,8 +164,8 @@ public class TransactionServiceImpl extends ServiceImpl<TransactionMapper, Trans
         }else{
             SysConfig walletPath = configMapper.checkConfigKeyUnique("WALLET_PATH");
             SysConfig walletAddress = configMapper.checkConfigKeyUnique("WALLET_ADDRESS");
-            String wallet_Path = "/Users/wangrifeng/wallet/UTC--2020-02-07T13-31-22.32000000Z--eb04131fbe988d43c0f9c0d8a30ccc3636994dda.json";
-            //String wallet_Path = walletPath.getConfigValue();
+            //String wallet_Path = "/Users/wangrifeng/wallet/UTC--2020-02-07T13-31-22.32000000Z--eb04131fbe988d43c0f9c0d8a30ccc3636994dda.json";
+            String wallet_Path = walletPath.getConfigValue();
             BigDecimal allBalance = getBalance(walletAddress.getConfigValue(),"0xdac17f958d2ee523a2206206994597c13d831ec7");
             if(allBalance.doubleValue() < transaction.getFromAmount().doubleValue()){
                 return AjaxResult.error("交易失败，总钱包余额不足");
