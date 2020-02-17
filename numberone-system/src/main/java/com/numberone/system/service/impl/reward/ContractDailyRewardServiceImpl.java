@@ -511,9 +511,9 @@ public class ContractDailyRewardServiceImpl implements RewardService {
             case 0:
                 return new BigDecimal("0");
             case 1:
-                return new BigDecimal("0.05");
+                return new BigDecimal(sysConfigService.selectConfigByKey("manager_copper_player_rate"));
             case 2:
-                return new BigDecimal("0.08");
+                return new BigDecimal(sysConfigService.selectConfigByKey("manager_sliver_player_rate"));
             case 3:
                 return new BigDecimal(sysConfigService.selectConfigByKey("manager_gold_player_rate"));
             case 4:
