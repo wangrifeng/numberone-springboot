@@ -76,9 +76,11 @@ public class InCome {
     @Excel(name = "平级收益")
     private BigDecimal sameLevelSalary;
 
-
     @TableField(exist = false)
     @Excel(name = "收益人")
+    private String loginName;
+
+    @TableField(exist = false)
     private String userName;
 
     @TableField(exist = false)
@@ -87,6 +89,7 @@ public class InCome {
     @TableField(exist = false)
     @Excel(name = "合约类型", readConverterExp = "1=屌丝,2=网红,3=明星,4=大咖")
     private Integer level;
+
 
     public InCome() {
     }

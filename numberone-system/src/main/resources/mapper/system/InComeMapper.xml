@@ -13,6 +13,7 @@
         salary ,
         sel_date as selDate ,
         u.user_name as userName ,
+        u.login_name as loginName ,
         c.level,
         c.name as contractName
         from
