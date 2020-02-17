@@ -103,6 +103,8 @@ public class SysUser extends BaseEntity
     /** 岗位组 */
     private Long[] postIds;
 
+    private String level;
+
     public Long getUserId()
     {
         return userId;
@@ -345,6 +347,14 @@ public class SysUser extends BaseEntity
 
     public void setUpName(String upName) {
         this.upName = upName;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     @Override

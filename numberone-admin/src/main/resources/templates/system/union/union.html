@@ -122,6 +122,18 @@
                     title: '用户名称'
                 },
                 {
+                    field: 'level',
+                    title: '等级',
+                    formatter: function(value, row, index) {
+                       switch (value) {
+                           case "1": return "铜牌玩家";
+                           case "2": return "银牌玩家";
+                           case "3": return "金牌玩家";
+                           case "4": return "王牌玩家";
+                       }
+                    }
+                },
+                {
                     field: 'contractName',
                     title: '合约'
                 },
