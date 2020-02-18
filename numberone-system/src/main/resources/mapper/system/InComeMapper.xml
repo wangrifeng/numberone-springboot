@@ -44,7 +44,7 @@
             from
             mdc_income
             where
-            sel_date = left(#{selDate},10) and FIND_IN_SET(user_id,#{value.ids}) and type = 1
+            sel_date like concat(left(#{selDate},10),'%') and FIND_IN_SET(user_id,#{value.ids}) and type = 1
         </foreach>
     </select>
 
@@ -54,7 +54,7 @@
         ifnull(sum(mi.contract_salary),0) as totalIncome
         from
         sys_user_level sul
-        join mdc_income mi on mi.user_id = sul.reced_id and mi.sel_date = left(#{selDate},10) and mi.type = 2
+        join mdc_income mi on mi.user_id = sul.reced_id and mi.sel_date like concat(left(#{selDate},10),'%') and mi.type = 2
         where
         sul.rec_id = #{userId}
     </select>
@@ -65,7 +65,7 @@
         from
         mdc_income mi
         where
-        mi.sel_date = left(#{selDate},10) and mi.type = 1
+        mi.sel_date like concat(left(#{selDate},10),'%') and mi.type = 1
         and user_id in (
         select
         reced_id

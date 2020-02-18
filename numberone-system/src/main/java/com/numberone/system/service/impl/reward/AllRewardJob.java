@@ -59,10 +59,12 @@ public class AllRewardJob {
         }
 
         //计算结算时间
-        Calendar instance = Calendar.getInstance();
-        instance.setTime(new Date());
-        instance.add(Calendar.DAY_OF_MONTH, -1); //当前时间减去一天，即一天前的时间
-        Date selDate = instance.getTime();
+//        Calendar instance = Calendar.getInstance();
+//        instance.setTime(new Date());
+//        instance.add(Calendar.DAY_OF_MONTH, -1); //当前时间减去一天，即一天前的时间
+//        Date selDate = instance.getTime();
+
+        Date selDate = new Date();
 
         //计算所有用户的静态收益
         for (Integer userId : userIds) {

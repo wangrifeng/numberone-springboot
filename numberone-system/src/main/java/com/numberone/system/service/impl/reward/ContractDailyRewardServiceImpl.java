@@ -138,7 +138,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         inComeEntityWrapper
                 .eq("type", 2)
                 .eq("user_id", userId)
-                .eq("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
+                .like("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
         List<InCome> inComes = inComeService.selectList(inComeEntityWrapper);
         if (inComes.size() == 0) {
             //该用户没有合约收益 非签约合约用户 无管理奖
@@ -183,7 +183,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         inComeEntityWrapper
                 .eq("type", 1)
                 .eq("user_id", userId)
-                .eq("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
+                .like("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
         List<InCome> inComes = inComeService.selectList(inComeEntityWrapper);
         if (inComes.size() == 0) {
             //该用户没有合约收益 非签约合约用户 无管理奖
@@ -261,7 +261,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         inComeEntityWrapper
                 .eq("type", 2)
                 .eq("user_id", userId)
-                .eq("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
+                .like("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
         List<InCome> inComes = inComeService.selectList(inComeEntityWrapper);
         if (inComes.size() == 0) {
             //该用户没有合约收益 非签约合约用户 无管理奖
@@ -291,7 +291,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         inComeEntityWrapper
                 .eq("type", 1)
                 .eq("user_id", userId)
-                .eq("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
+                .like("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
         List<InCome> inComes = inComeService.selectList(inComeEntityWrapper);
         if (inComes.size() == 0) {
             //该用户没有合约收益 非签约合约用户 无平级奖
@@ -369,7 +369,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         inComeEntityWrapper
                 .eq("type", 1)
                 .eq("user_id", userId)
-                .eq("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
+                .like("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
         List<InCome> inComes = inComeService.selectList(inComeEntityWrapper);
         if (inComes.size() == 0) {
             //该用户没有合约收益 非签约合约用户 无管理奖
@@ -547,7 +547,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         inComeEntityWrapper
                 .eq("type", 1)
                 .eq("user_id", userId)
-                .eq("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
+                .like("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
         List<InCome> inComes = inComeService.selectList(inComeEntityWrapper);
         if (inComes.size() == 0) {
             //该用户没有合约收益 非签约合约用户 无分享奖
