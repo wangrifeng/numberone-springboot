@@ -62,7 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="selectUserList" parameterType="SysUser" resultMap="SysUserResult">
 		select u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.password, u.sex, u.avatar, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, d.dept_name,
-		ifnull(u.union_sign_total_money,0) as unionSignTotalMoney,ifnull(u.member_size,1) as memberSize, ifnull((select sc.name from mdc_user_contract uc left join sys_contract sc on sc.id = uc.contract_id where user_id = u.user_id and sc.type = 1 limit 1),'') as contractName,
+		ifnull(u.union_sign_total_money,0) as unionSignTotalMoney,ifnull(u.member_size,1) as memberSize, ifnull((select sc.name from mdc_user_contract uc left join sys_contract sc on sc.id = uc.contract_id where user_id = u.user_id and sc.type = 1 and uc.del_flag = 0 limit 1),'') as contractName,
 		su.user_name as upName,u.level
 		from sys_user u
 		left join sys_dept d on u.dept_id = d.dept_id
