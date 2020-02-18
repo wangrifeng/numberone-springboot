@@ -93,7 +93,7 @@ public class TransactionServiceImpl extends ServiceImpl<TransactionMapper, Trans
             if(new Double(mdcMoney)>0){
                 //mdc收益
                 BigDecimal mdcIncome = new BigDecimal(mdcMoney);
-                BigDecimal mdcBalance = wallet.getUstdBlance();
+                BigDecimal mdcBalance = wallet.getMdcBlance();
                 wallet.setMdcBlance(mdcBalance.add(mdcIncome));
                 Transaction mdcTransaction = new Transaction();
                 mdcTransaction.setToAmount(new BigDecimal(mdcMoney));
