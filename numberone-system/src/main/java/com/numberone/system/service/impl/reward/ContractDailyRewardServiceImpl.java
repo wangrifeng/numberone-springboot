@@ -92,7 +92,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
      * @return
      */
     private BigDecimal convertUSTD2MDC(BigDecimal salary) {
-        BigDecimal rate = new BigDecimal(sysConfigService.selectConfigByKey("TODAY_MDC_PRICE"));
+        BigDecimal rate = new BigDecimal(sysConfigService.selectConfigByKey("MDC_CONVERT_USDT"));
         return salary.divide(rate);
     }
 
