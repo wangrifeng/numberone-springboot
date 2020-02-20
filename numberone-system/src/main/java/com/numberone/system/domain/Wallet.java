@@ -123,7 +123,11 @@ public class Wallet extends Model<Wallet> {
     }
 
     public void setUstdBlance(BigDecimal ustdBlance) {
-        this.ustdBlance = ustdBlance;
+        if(ustdBlance == null){
+            this.ustdBlance = new BigDecimal(0.0000);
+        }else{
+            this.ustdBlance = ustdBlance;
+        }
     }
 
     public BigDecimal getMdcBlance() {
@@ -131,7 +135,12 @@ public class Wallet extends Model<Wallet> {
     }
 
     public void setMdcBlance(BigDecimal mdcBlance) {
-        this.mdcBlance = mdcBlance;
+        if(mdcBlance == null){
+            this.mdcBlance = new BigDecimal(0.0000);
+        }else{
+            this.mdcBlance = mdcBlance;
+        }
+
     }
 
     public Integer getUserId() {
