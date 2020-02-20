@@ -3,10 +3,7 @@ package com.numberone.system.service.impl.reward;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.numberone.system.domain.Contract;
-import com.numberone.system.domain.InCome;
-import com.numberone.system.domain.User;
-import com.numberone.system.domain.UserContract;
+import com.numberone.system.domain.*;
 import com.numberone.system.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +41,9 @@ public class ContractDailyRewardServiceImpl implements RewardService {
 
     @Autowired
     private ISysConfigService sysConfigService;
+
+    @Autowired
+    private UserTmpLevelService userTmpLevelService;
 
     @Override
     public void calculateContractSalary(Integer userId, Map<Integer, Contract> contractCache, Date selDate) {
@@ -138,7 +138,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         inComeEntityWrapper
                 .eq("type", 2)
                 .eq("user_id", userId)
-                .eq("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
+                .like("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
         List<InCome> inComes = inComeService.selectList(inComeEntityWrapper);
         if (inComes.size() == 0) {
             //该用户没有合约收益 非签约合约用户 无管理奖
@@ -183,7 +183,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         inComeEntityWrapper
                 .eq("type", 1)
                 .eq("user_id", userId)
-                .eq("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
+                .like("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
         List<InCome> inComes = inComeService.selectList(inComeEntityWrapper);
         if (inComes.size() == 0) {
             //该用户没有合约收益 非签约合约用户 无管理奖
@@ -261,7 +261,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         inComeEntityWrapper
                 .eq("type", 2)
                 .eq("user_id", userId)
-                .eq("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
+                .like("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
         List<InCome> inComes = inComeService.selectList(inComeEntityWrapper);
         if (inComes.size() == 0) {
             //该用户没有合约收益 非签约合约用户 无管理奖
@@ -291,7 +291,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         inComeEntityWrapper
                 .eq("type", 1)
                 .eq("user_id", userId)
-                .eq("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
+                .like("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
         List<InCome> inComes = inComeService.selectList(inComeEntityWrapper);
         if (inComes.size() == 0) {
             //该用户没有合约收益 非签约合约用户 无平级奖
@@ -323,7 +323,8 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         List<User> directUsers = userService.getDirectUserLevel(levelOneIds);
         //查询当前用户信息
         User currentUser = userService.selectById(userId);
-        if (currentUser.getLevel() == 0) {
+        Integer currentUserLevel = this.getFinalLevel(currentUser);
+        if (currentUserLevel == 0) {
             //无身份 没有平级奖 更新用户的管理收益
             InCome finalIncome = new InCome();
             finalIncome.setId(inCome.getId());
@@ -334,7 +335,8 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         //从所有直推会员中获取直属收益
         BigDecimal count = new BigDecimal(0);
         for (User du : directUsers) {
-            if (du.getLevel() >= currentUser.getLevel()) {
+            Integer duUserLevel = this.getFinalLevel(du);
+            if (duUserLevel >= currentUserLevel) {
                 //平级现象 直推会员等级高于当前用户 当前用户拿直推用户的管理奖的6%
                 //用户的所有被推荐人id
                 Map<Integer, Map<String, Object>> directLevelIds = userLevelService.selectRecedUserIds(Integer.parseInt(du.getId()));
@@ -369,7 +371,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         inComeEntityWrapper
                 .eq("type", 1)
                 .eq("user_id", userId)
-                .eq("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
+                .like("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
         List<InCome> inComes = inComeService.selectList(inComeEntityWrapper);
         if (inComes.size() == 0) {
             //该用户没有合约收益 非签约合约用户 无管理奖
@@ -446,7 +448,9 @@ public class ContractDailyRewardServiceImpl implements RewardService {
 //        }
         //查询当前用户信息
         User currentUser = userService.selectById(userId);
-        if (currentUser.getLevel() == 0) {
+        Integer currentUserlevel = this.getFinalLevel(currentUser);
+
+        if (currentUserlevel == 0) {
             //无身份 没有管理奖 更新用户的管理收益
             InCome finalIncome = new InCome();
             finalIncome.setId(inCome.getId());
@@ -455,7 +459,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
             inComeService.updateById(finalIncome);
             return new BigDecimal(0);
         }
-        BigDecimal manageRate = this.getRateByLevel(currentUser.getLevel());
+        BigDecimal manageRate = this.getRateByLevel(currentUserlevel);
         //从所有直推会员中获取直属收益
         BigDecimal count = new BigDecimal(0);
         for (User du : directUsers) {
@@ -471,7 +475,8 @@ public class ContractDailyRewardServiceImpl implements RewardService {
 //                logger.info("用户" + currentUser.getUserName() + "获取" + du.getUserName() + "的平级收益为" + directUserManageInCome);
 //                count = count.add(directUserManageInCome);
 //            }
-            if (du.getLevel() < currentUser.getLevel()) {
+            Integer duUserlevel = this.getFinalLevel(du);
+            if (duUserlevel < currentUserlevel) {
                 //查询用户对应的合约信息
                 Contract contract = userContractService.selectContractByUserId(userId, 1);
                 if (contract == null) {
@@ -481,7 +486,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
 
                 BigDecimal burnValue = contract.getAmount().multiply(contract.getIncomeRate());
                 //极差现象 比率为直推用户伞下的 差比率
-                BigDecimal subtractRate = manageRate.subtract(this.getRateByLevel(du.getLevel()));
+                BigDecimal subtractRate = manageRate.subtract(this.getRateByLevel(duUserlevel));
                 //计算直推用户伞下的总收益
                 BigDecimal diretUserTotalSum = inComeService.getTotalSum(Integer.parseInt(du.getId()), selDate, convertUSTD2MDC(burnValue).doubleValue());
                 //该直推用户带来的极差收益
@@ -498,6 +503,15 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         inComeService.updateById(finalIncome);
 
         return count;
+    }
+
+    private Integer getFinalLevel(User user) {
+        UserTmpLevel noOutDateTmpLevel = userTmpLevelService.findNoOutDateTmpLevel(Integer.parseInt(user.getId()), new Date());
+        if(noOutDateTmpLevel == null){
+            return user.getLevel();
+        }else{
+            return Math.max(user.getLevel(),noOutDateTmpLevel.getLevel());
+        }
     }
 
     /**
@@ -547,7 +561,7 @@ public class ContractDailyRewardServiceImpl implements RewardService {
         inComeEntityWrapper
                 .eq("type", 1)
                 .eq("user_id", userId)
-                .eq("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
+                .like("sel_date", new SimpleDateFormat("yyyy-MM-dd").format(selDate).substring(0, 10));
         List<InCome> inComes = inComeService.selectList(inComeEntityWrapper);
         if (inComes.size() == 0) {
             //该用户没有合约收益 非签约合约用户 无分享奖

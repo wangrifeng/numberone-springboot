@@ -40,10 +40,10 @@ public class InComeServiceImpl extends ServiceImpl<InComeMapper, InCome> impleme
 
     @Override
     public BigDecimal yesterdaySignIncomeCount() {
-        Calendar instance = Calendar.getInstance();
-        instance.setTime(new Date());
-        instance.add(Calendar.DAY_OF_MONTH, -1); //当前时间减去一天，即一天前的时间
-        Date yesterday = instance.getTime();
+//        Calendar instance = Calendar.getInstance();
+//        instance.setTime(new Date());
+//        instance.add(Calendar.DAY_OF_MONTH, -1); //当前时间减去一天，即一天前的时间
+        Date yesterday = new Date();
         return this.baseMapper.yesterdaySignIncomeCount(yesterday);
     }
 }
