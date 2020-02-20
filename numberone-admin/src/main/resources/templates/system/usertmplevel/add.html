@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-user-add">
+			<input name="deptId"  type="hidden" id="treeId"/>
+			<div class="form-group">
+				<label class="col-sm-3 control-label "><span style="color: red">*</span>用户账号：</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" id="loginName" name="loginName" required/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red">*</span>等级：</label>
+				<div class="col-sm-8">
+					<select name="level" id="level" class="form-control m-b" required>
+						<option>请选择玩家等级</option>
+						<option value="1">青铜玩家</option>
+						<option value="2">银牌玩家</option>
+						<option value="3">金牌玩家</option>
+						<option value="4">王牌玩家</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label "><span style="color: red">*</span>天数：</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="number" id="number" name="number" required/>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div th:include="include::footer"></div>
+	<script th:src="@{/ajax/libs/select/select2.js}"></script>
+	<script>
+        $("#form-user-add").validate({
+        	rules:{
+        		loginName:{
+        			required:true,
+        			minlength: 1,
+        			maxlength: 50
+        		},
+				level:{
+        			required:true
+        		},
+				number:{
+        			required:true
+        		}
+        	}
+        });
+        
+        function submitHandler() {
+	        if ($.validate.form()) {
+	        	add();
+	        }
+	    }
+
+        function add() {
+        	var loginName = $("input[name='loginName']").val();
+        	var level = $("#level").val();
+        	var number = $("input[name='number']").val();
+        	$.ajax({
+        		cache : true,
+        		type : "POST",
+        		url : ctx + "system/userTmpLevel/add",
+        		data : {
+        			"loginName": loginName,
+        			"level": level,
+        			"number": number
+        		},
+        		async : false,
+        		error : function(request) {
+        			$.modal.alertError("系统错误");
+        		},
+        		success : function(data) {
+        			$.operate.successCallback(data);
+        		}
+        	});
+        }
+
+        /*用户管理-新增-选择部门树*/
+        function selectDeptTree() {
+        	var treeId = $("#treeId").val();
+        	var deptId = $.common.isEmpty(treeId) ? "100" : $("#treeId").val();
+        	var url = ctx + "system/dept/selectDeptTree/" + deptId;
+			var options = {
+				title: '选择部门',
+				width: "380",
+				url: ctx + "system/dept/selectDeptTree/" + deptId,
+				callBack: doSubmit
+			};
+			$.modal.openOptions(options);
+		}
+		
+		function doSubmit(index, layero){
+			var tree = layero.find("iframe")[0].contentWindow.$._tree;
+			if ($.tree.notAllowParents(tree)) {
+				var body = layer.getChildFrame('body', index);
+    			$("#treeId").val(body.find('#treeId').val());
+    			$("#treeName").val(body.find('#treeName').val());
+    			layer.close(index);
+			}
+		}
+    </script>
+</body>
+</html>
