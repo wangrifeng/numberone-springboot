@@ -17,7 +17,7 @@ public interface UserTmpLevelMapper extends BaseMapper<UserTmpLevel> {
      * @param params
      * @return
      */
-    List<UserTmpLevel> list(Map<String, Object> params);
+    List<UserTmpLevel> list(@Param("map") Map<String, Object> params);
 
     /**
      * 查询用户是否有未过期优惠
