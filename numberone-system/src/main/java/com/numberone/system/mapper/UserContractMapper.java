@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Select;
 
 public interface UserContractMapper extends BaseMapper<UserContract> {
 
-    @Select("select sc.level,sc.type,sc.id,amount,income_rate as incomeRate from mdc_user_contract muc join sys_contract sc on sc.id = muc.contract_id where muc.user_id = #{userId} and sc.type = #{type}")
+    @Select("select sc.level,sc.type,sc.id,amount,income_rate as incomeRate from mdc_user_contract muc join sys_contract sc on sc.id = muc.contract_id where muc.user_id = #{userId} and sc.type = #{type} and muc.del_flag = 0")
     Contract selectContractByUserId(@Param("userId") Integer userId, @Param("type") Integer type);
 
     /**
