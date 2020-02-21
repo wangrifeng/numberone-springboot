@@ -719,19 +719,28 @@
             	$.modal.closeLoading();
             },
             // 成功回调执行事件（父窗体静默更新）
-            successCallback: function(result) {
+            successCallback: function(result,flag) {
+        		if(typeof(flag) == "undefined" ){
+        			flag = true;
+				}
                 if (result.code == web_status.SUCCESS) {
-                    if (window.parent.$("#bootstrap-table").length > 0) {
+                	if(!flag){
                         $.modal.close();
                         window.parent.$.modal.msgSuccess(result.msg);
-                        window.parent.$.table.refresh();
-                    } else if (window.parent.$("#bootstrap-tree-table").length > 0) {
-                        $.modal.close();
-                        window.parent.$.modal.msgSuccess(result.msg);
-                        window.parent.$.treeTable.refresh();
-                    } else {
-                        $.modal.msgReload("保存成功,正在刷新数据请稍后……", modal_status.SUCCESS);
-                    }
+					}else{
+                        if (window.parent.$("#bootstrap-table").length > 0) {
+                            $.modal.close();
+                            window.parent.$.modal.msgSuccess(result.msg);
+                            window.parent.$.table.refresh();
+                        } else if (window.parent.$("#bootstrap-tree-table").length > 0) {
+                            $.modal.close();
+                            window.parent.$.modal.msgSuccess(result.msg);
+                            window.parent.$.treeTable.refresh();
+                        } else {
+                            $.modal.msgReload("保存成功,正在刷新数据请稍后……", modal_status.SUCCESS);
+                        }
+					}
+
                 } else {
                     $.modal.alertError(result.msg);
                 }

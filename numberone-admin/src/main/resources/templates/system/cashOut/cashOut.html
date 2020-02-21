@@ -161,7 +161,8 @@
                 $.modal.disable();
             },
             success: function(result) {
-                $.operate.successCallback(result);
+                $.operate.successCallback(result,false);
+                $.table.refresh();
             }
         };
         $.ajax(config)
